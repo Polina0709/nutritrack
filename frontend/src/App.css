@@ -64,7 +64,7 @@ body.dark {
   --text-secondary: #7c5667;
   --accent-primary: var(--brand-berry);
 
-  /* Хедер: світла тема (як на макеті) */
+  /* Хедер: світла тема */
   --header-bg: var(--brand-blush-card);
   --header-brand-color: var(--brand-olive);
   --header-shadow: drop-shadow(0 3px 5px rgba(180, 65, 105, 0.16));
@@ -93,7 +93,7 @@ body.dark {
   --text-secondary: #bfa6b4;
   --accent-primary: #e05283;
 
-  /* Хедер: темна тема (як на макеті) */
+  /* Хедер: темна тема */
   --header-bg: var(--brand-berry);
   --header-brand-color: var(--brand-pink-bg);
   --header-shadow: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.45));
@@ -368,7 +368,7 @@ body.dark {
 }
 
 /* =========================================================
-   ЦЕНТРАЛЬНА ПІГУЛКА НАВІГАЦІЇ В ХЕДЕРІ (В ЄДИНОМУ СТИЛІ САЙТУ)
+   ЦЕНТРАЛЬНА ПІГУЛКА НАВІГАЦІЇ В ХЕДЕРІ (ДЕСКТОП)
    ========================================================= */
 .header-center-nav {
   justify-self: center;
@@ -436,7 +436,7 @@ body.dark {
 }
 
 /* =========================================================
-   КНОПКИ ХЕДЕРА (В ЄДИНОМУ СТИЛІ ЗАСТОСУНКУ)
+   КНОПКИ ХЕДЕРА (ДЕСКТОП)
    ========================================================= */
 .nav-links {
   justify-self: end;
@@ -508,6 +508,198 @@ body.dark {
   border-color: var(--brand-pink-bg);
 }
 
+/* Кнопка-бургер прихована на широких екранах */
+.mobile-menu-toggle-btn {
+  display: none;
+}
+
+/* =========================================================
+   МОБІЛЬНЕ БОКОВЕ МЕНЮ (SIDE DRAWER)
+   ========================================================= */
+.mobile-drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(20, 17, 24, 0.45);
+  backdrop-filter: blur(3px);
+  z-index: 998;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.22s ease;
+}
+
+.mobile-drawer-backdrop.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.mobile-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: min(310px, 84vw);
+  background-color: var(--surface-bg);
+  border-left: 1.5px solid var(--border-color);
+  box-shadow: -12px 0 32px rgba(0, 0, 0, 0.22);
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  transform: translateX(100%);
+  visibility: hidden;
+  transition: transform 0.26s cubic-bezier(0.22, 1, 0.36, 1), visibility 0.26s;
+}
+
+.mobile-drawer.open {
+  transform: translateX(0);
+  visibility: visible;
+}
+
+.mobile-drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 20px;
+  border-bottom: 1.5px solid var(--border-color);
+  background-color: var(--surface-sub-bg);
+}
+
+.mobile-drawer-brand {
+  font-family: 'Berkshire Swash', Georgia, serif;
+  font-size: 1.65rem;
+  color: var(--brand-olive);
+  user-select: none;
+}
+
+.app-container.dark .mobile-drawer-brand {
+  color: var(--brand-pink-bg);
+}
+
+.mobile-drawer-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px 18px 28px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.mobile-drawer-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.mobile-drawer-label {
+  font-size: 11.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-secondary);
+  padding: 0 6px 2px 6px;
+}
+
+.mobile-drawer-link {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  border-radius: 14px;
+  background-color: var(--surface-sub-bg);
+  border: 1.5px solid var(--border-color);
+  color: var(--text-primary);
+  font-size: 14.5px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: transform 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.mobile-drawer-link:hover {
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+}
+
+.mobile-drawer-link--admin {
+  background-color: var(--brand-berry);
+  border-color: transparent;
+  color: #ffffff !important;
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(200, 55, 104, 0.22);
+}
+
+.app-container.dark .mobile-drawer-link--admin {
+  background-color: var(--brand-olive);
+}
+
+.mobile-drawer-divider {
+  height: 1px;
+  background-color: var(--border-color);
+  margin: 2px 0;
+}
+
+.mobile-drawer-profile-btn {
+  width: 100%;
+  padding: 13px 16px;
+  border-radius: 9999px;
+  border: 1.5px solid var(--hdr-pill-border);
+  background-color: var(--hdr-pill-bg);
+  color: var(--hdr-pill-color);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(200, 55, 104, 0.2);
+  transition: transform 0.15s ease, background-color 0.15s ease;
+}
+
+.mobile-drawer-profile-btn:hover {
+  background-color: var(--hdr-pill-hover-bg);
+}
+
+.mobile-drawer-action-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  border-radius: 14px;
+  border: 1.5px solid var(--border-color);
+  background-color: var(--surface-sub-bg);
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  box-sizing: border-box;
+  transition: border-color 0.15s ease, color 0.15s ease, background-color 0.15s ease;
+}
+
+.mobile-drawer-action-btn:hover {
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+}
+
+.mobile-drawer-logout-btn {
+  color: #c62828;
+}
+
+.app-container.dark .mobile-drawer-logout-btn {
+  color: #f87171;
+}
+
+.mobile-drawer-logout-btn:hover {
+  border-color: #d32f2f;
+  background-color: rgba(211, 47, 47, 0.08);
+  color: #d32f2f;
+}
+
+@media (min-width: 901px) {
+  .mobile-drawer-backdrop,
+  .mobile-drawer {
+    display: none;
+  }
+}
+
 /* =========================================================
    ОСНОВНА ОБОЛОНКА ДАШБОРДУ ТА ПІГУЛКА ВКЛАДОК
    ========================================================= */
@@ -569,22 +761,33 @@ body.dark {
 }
 
 /* =========================================================
-   АДАПТИВНІСТЬ
+   АДАПТИВНІСТЬ (МОБІЛЬНІ ТА МАЛІ ПРИСТРОЇ <= 900px)
    ========================================================= */
-@media (max-width: 960px) {
-  .app-navbar {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-  }
-
-  .header-center-nav {
-    order: 3;
-    margin: 2px auto 0;
-  }
-}
-
 @media (max-width: 900px) {
+  .app-navbar {
+    grid-template-columns: 1fr auto 1fr;
+    padding: 16px 18px 6px 18px;
+  }
+
+  /* Логотип строго по центру хедера */
+  .app-brand {
+    grid-column: 2;
+    justify-self: center;
+  }
+
+  /* Ховаємо десктопні навігаційні елементи в хедері */
+  .header-center-nav,
+  .nav-links {
+    display: none;
+  }
+
+  /* Кнопка-бургер на одному рівні з логотипом праворуч */
+  .mobile-menu-toggle-btn {
+    display: inline-flex;
+    grid-column: 3;
+    justify-self: end;
+  }
+
   .auth-landing {
     flex-direction: column;
   }
@@ -632,19 +835,7 @@ body.dark {
     padding: 14px 16px 4px 16px;
   }
 
-  .header-center-link {
-    padding: 0 12px;
-    font-size: 12.5px;
-    height: 28px;
-  }
-
-  .profile-trigger-btn {
-    padding: 0 15px;
-    font-size: 12.5px;
-    height: 36px;
-  }
-
-  .header-circle-btn {
+  .mobile-menu-toggle-btn {
     width: 36px;
     height: 36px;
   }

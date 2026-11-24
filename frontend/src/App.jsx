@@ -77,6 +77,21 @@ const LogoutIcon = () => (
     </svg>
 );
 
+const MenuIcon = () => (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" aria-hidden="true">
+        <line x1="3.5" y1="6.5" x2="20.5" y2="6.5" />
+        <line x1="3.5" y1="12" x2="20.5" y2="12" />
+        <line x1="3.5" y1="17.5" x2="20.5" y2="17.5" />
+    </svg>
+);
+
+const CloseIcon = () => (
+    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" aria-hidden="true">
+        <line x1="6" y1="6" x2="18" y2="18" />
+        <line x1="18" y1="6" x2="6" y2="18" />
+    </svg>
+);
+
 const AuthLoadingScreen = () => (
     <div className="auth-loading-screen" aria-busy="true" aria-label="Завантаження NutriTrack">
         <span className="auth-loading-brand">NutriTrack</span>
@@ -217,6 +232,7 @@ function App() {
     const [user, setUser] = useState(null);
     const [isAuthLoading, setIsAuthLoading] = useState(true);
     const [isProfileOpen, setIsProfileOpen] = useState(false);
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [refreshTrigger, setRefreshTrigger] = useState(0);
 
     const fetchUser = () => {
@@ -241,10 +257,45 @@ function App() {
         localStorage.setItem('app-theme', theme);
     }, [theme]);
 
+    useEffect(() => {
+        if (!isMobileMenuOpen) return;
+
+        const handleKeyDown = (e) => {
+            if (e.key === 'Escape') {
+                setIsMobileMenuOpen(false);
+            }
+        };
+
+        const handleResize = () => {
+            if (window.innerWidth > 900) {
+                setIsMobileMenuOpen(false);
+            }
+        };
+
+        document.body.style.overflow = 'hidden';
+        window.addEventListener('keydown', handleKeyDown);
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+            document.body.style.overflow = '';
+            window.removeEventListener('keydown', handleKeyDown);
+            window.removeEventListener('resize', handleResize);
+        };
+    }, [isMobileMenuOpen]);
+
     const handleProfileUpdateSuccess = (updatedUser) => {
         setUser(updatedUser);
         setIsProfileOpen(false);
         setRefreshTrigger((prev) => prev + 1);
+    };
+
+    const handleOpenProfileFromDrawer = () => {
+        setIsMobileMenuOpen(false);
+        setIsProfileOpen(true);
+    };
+
+    const toggleTheme = () => {
+        setTheme((prev) => (prev === 'light' ? 'dark' : 'light'));
     };
 
     const isDark = theme === 'dark';
@@ -257,69 +308,168 @@ function App() {
                 ) : (
                     <>
                         {user && (
-                            <header className="app-header-wrapper">
-                                <nav className="app-navbar" aria-label="Головна навігація">
-                                    {/* КЛІКАБЕЛЬНИЙ ЛОГОТИП ДЛЯ ПОВЕРНЕННЯ НА ГОЛОВНУ */}
-                                    <a href="/" className="app-brand" title="На головну сторінку">
-                                        <h1 className="app-brand-title">NutriTrack</h1>
-                                        <span className="app-brand-sparkles" aria-hidden="true">
-                                            <span className="app-brand-sparkle-sm">
-                                                <SparkleIcon size={14} />
+                            <>
+                                <header className="app-header-wrapper">
+                                    <nav className="app-navbar" aria-label="Головна навігація">
+                                        {/* КЛІКАБЕЛЬНИЙ ЛОГОТИП (ЗЛІВА НА ДЕСКТОПІ, ПО ЦЕНТРУ НА МОБІЛЬНИХ) */}
+                                        <a href="/" className="app-brand" title="На головну сторінку">
+                                            <h1 className="app-brand-title">NutriTrack</h1>
+                                            <span className="app-brand-sparkles" aria-hidden="true">
+                                                <span className="app-brand-sparkle-sm">
+                                                    <SparkleIcon size={14} />
+                                                </span>
+                                                <span className="app-brand-sparkle-lg">
+                                                    <SparkleIcon size={22} />
+                                                </span>
                                             </span>
-                                            <span className="app-brand-sparkle-lg">
-                                                <SparkleIcon size={22} />
-                                            </span>
-                                        </span>
-                                    </a>
-
-                                    {/* ЦЕНТРАЛЬНА ПАНЕЛЬ НАВІГАЦІЇ ПО СТОРІНКАХ */}
-                                    <div className="header-center-nav">
-                                        <a href="/about.html" className="header-center-link">
-                                            Про проєкт
                                         </a>
 
-                                        <a href="/catalog" className="header-center-link">
-                                            Каталог
-                                        </a>
-
-                                        {user.role === 'ADMIN' && (
-                                            <a href="/admin" className="header-center-link header-center-link--admin">
-                                                Адмін-панель
+                                        {/* ЦЕНТРАЛЬНА ПАНЕЛЬ НАВІГАЦІЇ ПО СТОРІНКАХ (ДЕСКТОП) */}
+                                        <div className="header-center-nav">
+                                            <a href="/about.html" className="header-center-link">
+                                                Про проєкт
                                             </a>
-                                        )}
-                                    </div>
 
-                                    {/* ПРАВА ЧАСТИНА: ТЕМА, ПРОФІЛЬ, ВИХІД */}
-                                    <div className="nav-links">
+                                            <a href="/catalog" className="header-center-link">
+                                                Каталог
+                                            </a>
+
+                                            {user.role === 'ADMIN' && (
+                                                <a href="/admin" className="header-center-link header-center-link--admin">
+                                                    Адмін-панель
+                                                </a>
+                                            )}
+                                        </div>
+
+                                        {/* ПРАВА ЧАСТИНА: ТЕМА, ПРОФІЛЬ, ВИХІД (ДЕСКТОП) */}
+                                        <div className="nav-links">
+                                            <button
+                                                type="button"
+                                                onClick={toggleTheme}
+                                                className="header-circle-btn"
+                                                title={isDark ? 'Увімкнути світлу тему' : 'Увімкнути темну тему'}
+                                                aria-label="Перемкнути тему"
+                                            >
+                                                {theme === 'light' ? <SunIcon /> : <MoonIcon />}
+                                            </button>
+
+                                            <button
+                                                type="button"
+                                                onClick={() => setIsProfileOpen(true)}
+                                                className="profile-trigger-btn"
+                                            >
+                                                Налаштування профілю
+                                            </button>
+
+                                            <a
+                                                href="/auth/logout"
+                                                className="header-circle-btn logout-circle-btn"
+                                                title="Вийти з акаунту"
+                                                aria-label="Вийти з акаунту"
+                                            >
+                                                <LogoutIcon />
+                                            </a>
+                                        </div>
+
+                                        {/* КНОПКА БОКОВОГО МЕНЮ (ТРИ ПОЛОСИ СПРАВА НА МОБІЛЬНИХ) */}
                                         <button
                                             type="button"
-                                            onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
+                                            onClick={() => setIsMobileMenuOpen(true)}
+                                            className="header-circle-btn mobile-menu-toggle-btn"
+                                            aria-label="Відкрити меню"
+                                            aria-expanded={isMobileMenuOpen}
+                                            aria-controls="mobile-nav-drawer"
+                                        >
+                                            <MenuIcon />
+                                        </button>
+                                    </nav>
+                                </header>
+
+                                {/* МОБІЛЬНЕ БОКОВЕ МЕНЮ (DRAWER) */}
+                                <div
+                                    className={`mobile-drawer-backdrop ${isMobileMenuOpen ? 'open' : ''}`}
+                                    onClick={() => setIsMobileMenuOpen(false)}
+                                    aria-hidden="true"
+                                />
+
+                                <aside
+                                    id="mobile-nav-drawer"
+                                    className={`mobile-drawer ${isMobileMenuOpen ? 'open' : ''}`}
+                                    aria-label="Мобільне меню"
+                                    aria-hidden={!isMobileMenuOpen}
+                                >
+                                    <div className="mobile-drawer-header">
+                                        <span className="mobile-drawer-brand">NutriTrack</span>
+                                        <button
+                                            type="button"
+                                            onClick={() => setIsMobileMenuOpen(false)}
                                             className="header-circle-btn"
-                                            title={isDark ? 'Увімкнути світлу тему' : 'Увімкнути темну тему'}
-                                            aria-label="Перемкнути тему"
+                                            aria-label="Закрити меню"
                                         >
-                                            {theme === 'light' ? <SunIcon /> : <MoonIcon />}
+                                            <CloseIcon />
                                         </button>
-
-                                        <button
-                                            type="button"
-                                            onClick={() => setIsProfileOpen(true)}
-                                            className="profile-trigger-btn"
-                                        >
-                                            Налаштування профілю
-                                        </button>
-
-                                        <a
-                                            href="/auth/logout"
-                                            className="header-circle-btn logout-circle-btn"
-                                            title="Вийти з акаунту"
-                                            aria-label="Вийти з акаунту"
-                                        >
-                                            <LogoutIcon />
-                                        </a>
                                     </div>
-                                </nav>
-                            </header>
+
+                                    <div className="mobile-drawer-body">
+                                        <div className="mobile-drawer-group">
+                                            <span className="mobile-drawer-label">Навігація</span>
+                                            <a
+                                                href="/about.html"
+                                                className="mobile-drawer-link"
+                                                onClick={() => setIsMobileMenuOpen(false)}
+                                            >
+                                                Про проєкт
+                                            </a>
+                                            <a
+                                                href="/catalog"
+                                                className="mobile-drawer-link"
+                                                onClick={() => setIsMobileMenuOpen(false)}
+                                            >
+                                                Каталог
+                                            </a>
+                                            {user.role === 'ADMIN' && (
+                                                <a
+                                                    href="/admin"
+                                                    className="mobile-drawer-link mobile-drawer-link--admin"
+                                                    onClick={() => setIsMobileMenuOpen(false)}
+                                                >
+                                                    Адмін-панель
+                                                </a>
+                                            )}
+                                        </div>
+
+                                        <div className="mobile-drawer-divider" />
+
+                                        <div className="mobile-drawer-group">
+                                            <span className="mobile-drawer-label">Керування</span>
+                                            <button
+                                                type="button"
+                                                onClick={handleOpenProfileFromDrawer}
+                                                className="mobile-drawer-profile-btn"
+                                            >
+                                                Налаштування профілю
+                                            </button>
+
+                                            <button
+                                                type="button"
+                                                onClick={toggleTheme}
+                                                className="mobile-drawer-action-btn"
+                                            >
+                                                {theme === 'light' ? <MoonIcon /> : <SunIcon />}
+                                                <span>{isDark ? 'Світла тема' : 'Темна тема'}</span>
+                                            </button>
+
+                                            <a
+                                                href="/auth/logout"
+                                                className="mobile-drawer-action-btn mobile-drawer-logout-btn"
+                                            >
+                                                <LogoutIcon />
+                                                <span>Вийти з акаунту</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </aside>
+                            </>
                         )}
 
                         <main className="app-main">
