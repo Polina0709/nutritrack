@@ -1,0 +1,264 @@
+/* frontend/src/components/DailyAlertsBar.css */
+
+.daily-alerts-bar {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.daily-alerts-bar.light {
+    --dab-card-bg: #fff0f5;
+    --dab-sub-bg: #ffe5ef;
+    --dab-inner-bg: #ffffff;
+    --dab-border: #f4c6d7;
+    --dab-shadow: 0 8px 22px rgba(200, 55, 104, 0.13);
+    --dab-text: #2b2328;
+    --dab-subtext: #7c5667;
+    --dab-berry: #c83768;
+    --dab-olive: #4a6b2c;
+    --dab-olive-hover: #3b5622;
+
+    --dab-danger-bg: #ffe8ee;
+    --dab-danger-border: #e11d48;
+    --dab-danger-text: #9f1239;
+
+    --dab-water-bg: #eaf6ff;
+    --dab-water-border: #b8e1fa;
+    --dab-water-text: #0369a1;
+
+    --dab-med-bg: #f6effd;
+    --dab-med-border: #d8b4fe;
+    --dab-med-title: #6b21a8;
+    --dab-med-accent: #7e22ce;
+}
+
+.daily-alerts-bar.dark {
+    --dab-card-bg: #1f1a24;
+    --dab-sub-bg: #292230;
+    --dab-inner-bg: #141118;
+    --dab-border: #3d3147;
+    --dab-shadow: 0 10px 26px rgba(0, 0, 0, 0.35);
+    --dab-text: #f8eef3;
+    --dab-subtext: #bfa6b4;
+    --dab-berry: #f472b6;
+    --dab-olive: #8ab85c;
+    --dab-olive-hover: #739e48;
+
+    --dab-danger-bg: rgba(225, 29, 72, 0.2);
+    --dab-danger-border: #fb7185;
+    --dab-danger-text: #fecdd3;
+
+    --dab-water-bg: #162231;
+    --dab-water-border: #26405e;
+    --dab-water-text: #7dd3fc;
+
+    --dab-med-bg: rgba(139, 92, 246, 0.18);
+    --dab-med-border: #8b5cf6;
+    --dab-med-title: #d8b4fe;
+    --dab-med-accent: #c084fc;
+}
+
+/* =========================================================
+   ЗАГАЛЬНИЙ БАЗОВИЙ КОНТЕЙНЕР СПОВІЩЕННЯ
+   ========================================================= */
+.dab-alert {
+    border-radius: 24px;
+    padding: 13px 18px;
+    box-shadow: var(--dab-shadow);
+    box-sizing: border-box;
+}
+
+/* =========================================================
+   1. ПОПЕРЕДЖЕННЯ ТА ІНФО ПРО ВОДУ
+   ========================================================= */
+.dab-alert--danger {
+    background: var(--dab-danger-bg);
+    border: 1.5px solid var(--dab-danger-border);
+    color: var(--dab-danger-text);
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 13px;
+}
+
+.dab-alert-icon {
+    font-size: 19px;
+    line-height: 1.2;
+    flex-shrink: 0;
+}
+
+.dab-danger-title {
+    display: block;
+    font-size: 13.5px;
+}
+
+.dab-danger-desc {
+    font-size: 12px;
+    margin-top: 3px;
+    line-height: 1.45;
+    opacity: 0.92;
+}
+
+.dab-alert--water {
+    background: var(--dab-water-bg);
+    border: 1.5px solid var(--dab-water-border);
+    color: var(--dab-water-text);
+    font-size: 13px;
+    line-height: 1.45;
+}
+
+/* =========================================================
+   2. АКТИВНІ НАГАДУВАННЯ ПРО ПРИЙОМ ПРЕПАРАТІВ
+   ========================================================= */
+.dab-alert--meds {
+    background: var(--dab-med-bg);
+    border: 1.5px solid var(--dab-med-border);
+    color: var(--dab-text);
+}
+
+.dab-meds-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.dab-meds-title {
+    font-size: 13.5px;
+    color: var(--dab-med-title);
+}
+
+.dab-push-btn {
+    padding: 5px 13px;
+    border-radius: 9999px;
+    border: 1.5px solid var(--dab-med-accent);
+    background: var(--dab-inner-bg);
+    color: var(--dab-med-accent);
+    font-size: 11.5px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.dab-push-btn:hover {
+    background: var(--dab-med-accent);
+    color: #ffffff;
+}
+
+.dab-meds-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.dab-med-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    background: var(--dab-inner-bg);
+    border: 1px solid var(--dab-med-border);
+    border-radius: 16px;
+    padding: 9px 14px;
+    font-size: 13px;
+}
+
+.dab-med-dosage {
+    color: var(--dab-subtext);
+}
+
+.dab-med-time {
+    margin-left: 8px;
+    font-size: 12px;
+    color: var(--dab-med-accent);
+    font-weight: 700;
+}
+
+.dab-med-actions {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.dab-btn-take {
+    padding: 6px 14px;
+    border-radius: 9999px;
+    border: none;
+    background: var(--dab-olive);
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+}
+
+.dab-btn-take:hover {
+    background: var(--dab-olive-hover);
+}
+
+.dab-btn-later {
+    padding: 6px 12px;
+    border-radius: 9999px;
+    border: 1px solid var(--dab-border);
+    background: var(--dab-sub-bg);
+    color: var(--dab-subtext);
+    font-size: 11.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.dab-btn-later:hover {
+    border-color: var(--dab-berry);
+    color: var(--dab-berry);
+}
+
+/* =========================================================
+   3. ЗАПЛАНОВАНІ НА СЬОГОДНІ ПРЕПАРАТИ
+   ========================================================= */
+.dab-upcoming-bar {
+    background: var(--dab-card-bg);
+    border: 1px solid var(--dab-border);
+    border-radius: 9999px;
+    padding: 9px 18px;
+    font-size: 12.5px;
+    color: var(--dab-subtext);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    box-shadow: var(--dab-shadow);
+}
+
+.dab-upcoming-label {
+    font-weight: 600;
+}
+
+.dab-upcoming-pill {
+    padding: 3px 11px;
+    border-radius: 9999px;
+    background: var(--dab-sub-bg);
+    border: 1px solid var(--dab-border);
+    color: var(--dab-text);
+    font-weight: 700;
+    font-size: 12px;
+}
+
+/* =========================================================
+   АДАПТИВНІСТЬ
+   ========================================================= */
+@media (max-width: 540px) {
+    .dab-alert {
+        border-radius: 20px;
+        padding: 12px 14px;
+    }
+
+    .dab-upcoming-bar {
+        border-radius: 20px;
+        padding: 10px 14px;
+    }
+}

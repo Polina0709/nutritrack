@@ -1,0 +1,344 @@
+/* frontend/src/components/ProfileModal.css */
+
+.profile-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(43, 35, 40, 0.56);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 16px;
+    box-sizing: border-box;
+}
+
+.profile-modal-overlay.light {
+    --pm-modal-bg: #fff0f5;
+    --pm-sub-bg: #ffe5ef;
+    --pm-input-bg: #ffffff;
+    --pm-border: #f4c6d7;
+    --pm-shadow: 0 20px 48px rgba(140, 35, 72, 0.25);
+    --pm-text: #2b2328;
+    --pm-subtext: #7c5667;
+    --pm-berry: #c83768;
+    --pm-berry-hover: #b12c59;
+    --pm-olive: #4a6b2c;
+    --pm-olive-hover: #3b5622;
+
+    --pm-calc-bg: #eef6e7;
+    --pm-calc-border: #c5dca8;
+
+    --pm-water-bg: #eaf6ff;
+    --pm-water-border: #b8e1fa;
+    --pm-water-accent: #0369a1;
+    --pm-water-btn: #0284c7;
+
+    --pm-cycle-bg: #ffe5ef;
+    --pm-cycle-border: #f4c6d7;
+}
+
+.profile-modal-overlay.dark {
+    --pm-modal-bg: #1f1a24;
+    --pm-sub-bg: #292230;
+    --pm-input-bg: #141118;
+    --pm-border: #3d3147;
+    --pm-shadow: 0 22px 50px rgba(0, 0, 0, 0.55);
+    --pm-text: #f8eef3;
+    --pm-subtext: #bfa6b4;
+    --pm-berry: #f472b6;
+    --pm-berry-hover: #ec4899;
+    --pm-olive: #8ab85c;
+    --pm-olive-hover: #739e48;
+
+    --pm-calc-bg: rgba(74, 107, 44, 0.18);
+    --pm-calc-border: #4a6b2c;
+
+    --pm-water-bg: #162231;
+    --pm-water-border: #26405e;
+    --pm-water-accent: #7dd3fc;
+    --pm-water-btn: #0284c7;
+
+    --pm-cycle-bg: #292230;
+    --pm-cycle-border: #3d3147;
+}
+
+/* =========================================================
+   МОДАЛЬНЕ ВІКНО ТА ШАПКА
+   ========================================================= */
+.pm-modal {
+    background: var(--pm-modal-bg);
+    color: var(--pm-text);
+    border: 1.5px solid var(--pm-border);
+    border-radius: 28px;
+    padding: 24px 26px;
+    width: 100%;
+    max-width: 520px;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: var(--pm-shadow);
+    box-sizing: border-box;
+}
+
+.pm-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.pm-title {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.pm-close-btn {
+    background: var(--pm-sub-bg);
+    border: 1px solid var(--pm-border);
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    font-size: 16px;
+    cursor: pointer;
+    color: var(--pm-subtext);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.pm-close-btn:hover {
+    border-color: var(--pm-berry);
+    color: var(--pm-berry);
+}
+
+/* =========================================================
+   СІТКИ ТА ПОЛЯ ВВЕДЕННЯ
+   ========================================================= */
+.pm-grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.pm-grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.pm-grid-cycle {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1.3fr;
+    gap: 8px;
+}
+
+.pm-form-group {
+    margin-bottom: 14px;
+}
+
+.pm-form-group-sm {
+    margin-bottom: 10px;
+}
+
+.pm-form-group-lg {
+    margin-bottom: 18px;
+}
+
+.pm-field-label {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 4px;
+    color: var(--pm-text);
+}
+
+.pm-field-label--xs {
+    font-size: 11px;
+    margin-bottom: 3px;
+}
+
+.pm-input {
+    width: 100%;
+    padding: 8px 12px;
+    border-radius: 14px;
+    border: 1px solid var(--pm-border);
+    background: var(--pm-input-bg);
+    color: var(--pm-text);
+    box-sizing: border-box;
+    font-family: inherit;
+    font-size: 13px;
+    outline: none;
+    transition: border-color 0.15s ease;
+}
+
+.pm-input:focus {
+    border-color: var(--pm-berry);
+}
+
+.profile-modal-overlay.light .pm-input[type='date'] {
+    color-scheme: light;
+}
+
+.profile-modal-overlay.dark .pm-input[type='date'] {
+    color-scheme: dark;
+}
+
+/* =========================================================
+   ПІДБЛОКИ: КАЛЬКУЛЯТОР КБЖВ, ВОДА, ЦИКЛ
+   ========================================================= */
+.pm-sub-box {
+    border-radius: 20px;
+    padding: 14px 16px;
+    margin-bottom: 16px;
+}
+
+.pm-sub-box--calc {
+    background: var(--pm-calc-bg);
+    border: 1px solid var(--pm-calc-border);
+}
+
+.pm-calc-btn {
+    width: 100%;
+    padding: 9px 14px;
+    background: var(--pm-olive);
+    color: #ffffff;
+    border: none;
+    border-radius: 9999px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 13px;
+    transition: background-color 0.15s ease;
+}
+
+.pm-calc-btn:hover {
+    background: var(--pm-olive-hover);
+}
+
+.pm-calc-info {
+    margin-top: 9px;
+    font-size: 12px;
+    color: var(--pm-text);
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+.pm-sub-box--water {
+    background: var(--pm-water-bg);
+    border: 1.5px solid var(--pm-water-border);
+    margin-bottom: 18px;
+}
+
+.pm-water-label {
+    color: var(--pm-water-accent);
+}
+
+.pm-presets-row {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 9px;
+}
+
+.pm-preset-btn {
+    padding: 5px 12px;
+    border-radius: 9999px;
+    border: 1px solid var(--pm-water-btn);
+    background: var(--pm-input-bg);
+    color: var(--pm-water-accent);
+    font-size: 12px;
+    cursor: pointer;
+    font-weight: 700;
+    transition: all 0.15s ease;
+}
+
+.pm-preset-btn.active {
+    background: var(--pm-water-btn);
+    color: #ffffff;
+}
+
+.pm-water-summary {
+    font-size: 12px;
+    color: var(--pm-water-accent);
+    line-height: 1.4;
+}
+
+.pm-sub-box--cycle {
+    background: var(--pm-cycle-bg);
+    border: 1px solid var(--pm-cycle-border);
+    margin-bottom: 18px;
+}
+
+.pm-cycle-heading {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--pm-berry);
+    margin-bottom: 9px;
+}
+
+/* =========================================================
+   КНОПКИ ДІЙ У ФУТЕРІ МОДАЛКИ
+   ========================================================= */
+.pm-footer-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.pm-btn-secondary {
+    flex: 1;
+    padding: 11px 16px;
+    background: var(--pm-sub-bg);
+    color: var(--pm-text);
+    border: 1px solid var(--pm-border);
+    border-radius: 9999px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 13.5px;
+    transition: border-color 0.15s ease;
+}
+
+.pm-btn-secondary:hover {
+    border-color: var(--pm-berry);
+}
+
+.pm-btn-primary {
+    flex: 2;
+    padding: 11px 18px;
+    background: var(--pm-berry);
+    color: #ffffff;
+    border: none;
+    border-radius: 9999px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 13.5px;
+    transition: background-color 0.15s ease;
+}
+
+.pm-btn-primary:hover:not(:disabled) {
+    background: var(--pm-berry-hover);
+}
+
+.pm-btn-primary:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+}
+
+/* =========================================================
+   АДАПТИВНІСТЬ
+   ========================================================= */
+@media (max-width: 540px) {
+    .pm-modal {
+        border-radius: 22px;
+        padding: 18px 16px;
+    }
+
+    .pm-grid-2,
+    .pm-grid-3,
+    .pm-grid-cycle {
+        grid-template-columns: 1fr;
+    }
+}

@@ -1,0 +1,614 @@
+/* frontend/src/components/HomeOverviewTab.css */
+
+.home-overview-layout {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 22px;
+    align-items: flex-start;
+    color: var(--text-primary);
+}
+
+.home-overview-layout.light {
+    --ho-card-bg: #fff0f5;
+    --ho-sub-bg: #ffe5ef;
+    --ho-border: #f4c6d7;
+    --ho-shadow: 0 8px 24px rgba(200, 55, 104, 0.14);
+    --ho-text: #2b2328;
+    --ho-subtext: #7c5667;
+    --ho-pill-bg: #ffd9e7;
+    --ho-olive: #4a6b2c;
+    --ho-berry: #c83768;
+    --ho-amber: #d97706;
+    --ho-water: #0284c7;
+    --ho-plum: #8b5cf6;
+    --ho-warn-bg: #fff8e7;
+    --ho-warn-border: #f59e0b;
+    --ho-warn-title: #b45309;
+}
+
+.home-overview-layout.dark {
+    --ho-card-bg: #1f1a24;
+    --ho-sub-bg: #292230;
+    --ho-border: #3d3147;
+    --ho-shadow: 0 10px 26px rgba(0, 0, 0, 0.35);
+    --ho-text: #f8eef3;
+    --ho-subtext: #bfa6b4;
+    --ho-pill-bg: #141118;
+    --ho-olive: #8ab85c;
+    --ho-berry: #f472b6;
+    --ho-amber: #fbbf24;
+    --ho-water: #38bdf8;
+    --ho-plum: #a78bfa;
+    --ho-warn-bg: rgba(245, 158, 11, 0.14);
+    --ho-warn-border: #b45309;
+    --ho-warn-title: #fbbf24;
+}
+
+/* =========================================================
+   ЛІВИЙ САЙДБАР
+   ========================================================= */
+.home-sidebar-card {
+    flex: 1 1 265px;
+    max-width: 315px;
+    background: var(--ho-card-bg);
+    border-radius: 28px;
+    padding: 22px 20px;
+    box-shadow: var(--ho-shadow);
+    box-sizing: border-box;
+}
+
+.home-profile-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.home-profile-avatar {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2.5px solid var(--ho-berry);
+    flex-shrink: 0;
+}
+
+.home-profile-meta {
+    overflow: hidden;
+}
+
+.home-profile-name {
+    font-weight: 700;
+    font-size: 15px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.home-profile-email {
+    font-size: 12px;
+    color: var(--ho-subtext);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.home-cycle-box {
+    background: var(--ho-sub-bg);
+    border: 1px solid var(--ho-border);
+    border-radius: 18px;
+    padding: 12px 14px;
+    margin-bottom: 18px;
+}
+
+.home-cycle-day {
+    font-size: 12px;
+    color: var(--ho-berry);
+    font-weight: 700;
+}
+
+.home-cycle-phase {
+    font-size: 13.5px;
+    font-weight: 700;
+    margin-top: 2px;
+}
+
+.home-cycle-prediction {
+    font-size: 11px;
+    color: var(--ho-subtext);
+    margin-top: 3px;
+}
+
+.home-sidebar-heading {
+    margin: 0 0 12px 0;
+    font-size: 12.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--ho-subtext);
+}
+
+.home-params-list {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    font-size: 13px;
+}
+
+.home-param-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 7px;
+    border-bottom: 1px solid var(--ho-border);
+}
+
+.home-param-row--stacked {
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.home-param-row-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.home-param-row--last {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.home-param-label {
+    color: var(--ho-subtext);
+}
+
+.home-dynamic-note {
+    font-size: 11px;
+    color: var(--ho-olive);
+    font-weight: 700;
+    text-align: right;
+    margin-top: 2px;
+}
+
+.home-sidebar-edit-btn {
+    margin-top: 16px;
+    width: 100%;
+    padding: 10px 14px;
+    border-radius: 9999px;
+    border: 1.5px solid var(--ho-berry);
+    background: var(--ho-sub-bg);
+    color: var(--ho-berry);
+    font-size: 12.5px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.home-sidebar-edit-btn:hover {
+    background: var(--ho-berry);
+    color: #ffffff;
+}
+
+/* =========================================================
+   ЦЕНТРАЛЬНА КОЛОНКА ТА КАРТКИ
+   ========================================================= */
+.home-main-column {
+    flex: 999 1 520px;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+}
+
+.home-card {
+    background: var(--ho-card-bg);
+    border-radius: 28px;
+    padding: 22px 24px;
+    box-shadow: var(--ho-shadow);
+    box-sizing: border-box;
+}
+
+.home-card--compact {
+    padding: 18px 24px;
+}
+
+.home-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.home-card-header--sm {
+    margin-bottom: 12px;
+}
+
+.home-card-header--md {
+    margin-bottom: 16px;
+}
+
+.home-phase-badges {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.home-phase-pill {
+    color: #ffffff;
+    padding: 5px 14px;
+    border-radius: 9999px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.home-cycle-subtitle {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--ho-subtext);
+}
+
+.home-link-btn {
+    background: transparent;
+    border: none;
+    color: var(--ho-berry);
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    padding: 0;
+}
+
+.home-link-btn:hover {
+    text-decoration: underline;
+}
+
+.home-phase-summary {
+    margin: 0 0 14px 0;
+    font-size: 13.5px;
+    line-height: 1.55;
+    color: var(--ho-text);
+}
+
+/* =========================================================
+   ПОПЕРЕДЖЕННЯ ТА СІТКА ПОРАД ПО ФАЗІ
+   ========================================================= */
+.home-deviations-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 14px;
+}
+
+.home-deviation-alert {
+    background: var(--ho-warn-bg);
+    border: 1px solid var(--ho-warn-border);
+    border-radius: 16px;
+    padding: 10px 14px;
+    font-size: 12px;
+    line-height: 1.45;
+}
+
+.home-deviation-title {
+    font-weight: 700;
+    color: var(--ho-warn-title);
+    margin-bottom: 2px;
+}
+
+.home-tips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+}
+
+.home-tip-tile {
+    background: var(--ho-sub-bg);
+    border: 1px solid var(--ho-border);
+    border-radius: 18px;
+    padding: 12px 14px;
+}
+
+.home-tip-title {
+    font-weight: 700;
+    font-size: 12.5px;
+    margin-bottom: 4px;
+}
+
+.home-tip-title--olive {
+    color: var(--ho-olive);
+}
+
+.home-tip-title--water {
+    color: var(--ho-water);
+}
+
+.home-tip-title--amber {
+    color: var(--ho-amber);
+}
+
+.home-tip-title--berry {
+    color: var(--ho-berry);
+}
+
+.home-tip-text {
+    font-size: 12px;
+    line-height: 1.48;
+    color: var(--ho-text);
+}
+
+.home-symptom-advice-box {
+    margin-top: 12px;
+    background: var(--ho-warn-bg);
+    border: 1px solid var(--ho-warn-border);
+    border-radius: 16px;
+    padding: 10px 14px;
+    font-size: 12px;
+}
+
+.home-symptom-advice-title {
+    display: block;
+    margin-bottom: 4px;
+    color: var(--ho-warn-title);
+}
+
+.home-symptom-advice-list {
+    margin: 0;
+    padding-left: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+/* =========================================================
+   ШВИДКИЙ ЧЕК-ІН
+   ========================================================= */
+.home-checkin-title-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.home-section-title {
+    margin: 0;
+    font-size: 15.5px;
+    font-weight: 700;
+}
+
+.home-section-title--lg {
+    font-size: 16.5px;
+}
+
+.home-status-saving {
+    font-size: 11px;
+    color: var(--ho-subtext);
+}
+
+.home-status-saved {
+    font-size: 11px;
+    color: var(--ho-olive);
+    font-weight: 700;
+}
+
+.home-secondary-btn {
+    padding: 6px 14px;
+    border-radius: 9999px;
+    border: 1px solid var(--ho-border);
+    background: var(--ho-sub-bg);
+    color: var(--ho-text);
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: border-color 0.15s ease;
+}
+
+.home-secondary-btn:hover {
+    border-color: var(--ho-berry);
+}
+
+.home-chip-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.home-chip-row--mb {
+    margin-bottom: 10px;
+}
+
+.home-chip-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--ho-subtext);
+    min-width: 65px;
+}
+
+.home-mood-chip,
+.home-symptom-chip {
+    padding: 5px 12px;
+    border-radius: 9999px;
+    border: 1px solid var(--ho-border);
+    background: var(--ho-sub-bg);
+    color: var(--ho-text);
+    font-size: 12.5px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    transition: all 0.15s ease;
+}
+
+.home-mood-chip.active {
+    border-color: var(--ho-berry);
+    background: rgba(200, 55, 104, 0.16);
+    font-weight: 700;
+}
+
+.home-symptom-chip.active {
+    border-color: var(--ho-olive);
+    background: rgba(74, 107, 44, 0.18);
+    font-weight: 700;
+}
+
+.home-chip-text {
+    font-size: 11.5px;
+}
+
+/* =========================================================
+   СТАТИСТИКА ТА ГРАФІКИ
+   ========================================================= */
+.home-dynamic-banner {
+    font-size: 11.5px;
+    color: var(--ho-olive);
+    font-weight: 700;
+    margin-top: 3px;
+}
+
+.home-period-pills {
+    display: flex;
+    gap: 4px;
+    background: var(--ho-pill-bg);
+    padding: 4px;
+    border-radius: 9999px;
+}
+
+.home-period-btn {
+    padding: 6px 14px;
+    border: none;
+    border-radius: 9999px;
+    background: transparent;
+    color: var(--ho-text);
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 12.5px;
+    transition: all 0.15s ease;
+}
+
+.home-period-btn.active {
+    background: var(--ho-berry);
+    color: #ffffff;
+    font-weight: 700;
+}
+
+.home-kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(125px, 1fr));
+    gap: 10px;
+    text-align: center;
+    margin-bottom: 18px;
+}
+
+.home-kpi-tile {
+    background: var(--ho-sub-bg);
+    padding: 12px 10px;
+    border-radius: 18px;
+    border: 1px solid var(--ho-border);
+}
+
+.home-kpi-value {
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.home-kpi-label {
+    font-size: 11px;
+    color: var(--ho-subtext);
+    margin-top: 2px;
+}
+
+.home-accent-berry {
+    color: var(--ho-berry);
+}
+
+.home-accent-olive {
+    color: var(--ho-olive);
+}
+
+.home-accent-amber {
+    color: var(--ho-amber);
+}
+
+.home-accent-water {
+    color: var(--ho-water);
+}
+
+.home-accent-plum {
+    color: var(--ho-plum);
+}
+
+.home-charts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 14px;
+}
+
+.home-chart-box {
+    background: var(--ho-sub-bg);
+    padding: 14px;
+    border-radius: 20px;
+    border: 1px solid var(--ho-border);
+}
+
+.home-chart-box--center {
+    text-align: center;
+}
+
+.home-chart-title {
+    margin: 0 0 8px 0;
+    font-size: 13px;
+    color: var(--ho-subtext);
+}
+
+.home-chart-title--center {
+    text-align: center;
+}
+
+.home-chart-canvas {
+    height: 175px;
+}
+
+.home-chart-canvas--donut {
+    position: relative;
+}
+
+.home-donut-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    pointer-events: none;
+}
+
+.home-donut-kcal {
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.home-donut-unit {
+    font-size: 10px;
+    color: var(--ho-subtext);
+}
+
+/* =========================================================
+   АДАПТИВНІСТЬ
+   ========================================================= */
+@media (max-width: 860px) {
+    .home-sidebar-card {
+        max-width: none;
+        width: 100%;
+    }
+}
+
+@media (max-width: 540px) {
+    .home-card {
+        border-radius: 22px;
+        padding: 16px;
+    }
+
+    .home-sidebar-card {
+        border-radius: 22px;
+        padding: 18px 16px;
+    }
+}

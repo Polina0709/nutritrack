@@ -1,0 +1,199 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+// Категорії прийомів їжі
+enum MealType {
+  BREAKFAST // Сніданок
+  LUNCH // Обід
+  DINNER // Вечеря
+  SNACK // Перекус
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  name      String?
+  googleId  String?  @unique
+  avatarUrl String?
+  role      Role     @default(USER)
+  createdAt DateTime @default(now())
+
+  // Фізичні параметри для розумного розрахунку
+  age           Int? // Вік
+  height        Float? // Зріст у см
+  gender        String? // 'MALE' або 'FEMALE'
+  activityLevel String? // 'SEDENTARY', 'LIGHT', 'MODERATE', 'ACTIVE', 'VERY_ACTIVE'
+  goal          String? // 'LOSE', 'MAINTAIN', 'GAIN', 'RECOMPOSITION'
+
+  // Цілі харчування та води
+  weight       Float?
+  targetWeight Float?
+  calorieGoal  Int    @default(2000)
+  proteinGoal  Float  @default(150)
+  fatGoal      Float  @default(70)
+  carbGoal     Float  @default(200)
+  waterGoal    Int    @default(2000)
+  glassVolume  Int    @default(250)
+
+  // Параметри менструального циклу
+  cycleLength     Int       @default(28) // Середня тривалість циклу (днів)
+  periodLength    Int       @default(5) // Середня тривалість менструації (днів)
+  lastPeriodStart DateTime? // Дата початку останньої менструації
+
+  // Зв'язки
+  meals        Meal[]
+  waterLogs    WaterLog[]
+  customFoods  CustomFood[]
+  recipes      Recipe[]
+  cyclePeriods CyclePeriod[]
+  wellnessLogs DailyWellnessLog[]
+  medications  Medication[]
+  weightLogs   WeightLog[]
+}
+
+model WeightLog {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  weight    Float
+  date      DateTime @db.Date
+  createdAt DateTime @default(now())
+
+  @@unique([userId, date])
+}
+
+// Прийом їжі (Групує продукти за категорією на певну дату)
+model Meal {
+  id     Int      @id @default(autoincrement())
+  userId Int
+  user   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type   MealType @default(SNACK)
+  date   DateTime @default(now())
+
+  totalCalories Int   @default(0)
+  totalProtein  Float @default(0)
+  totalFat      Float @default(0)
+  totalCarbs    Float @default(0)
+
+  foodItems FoodItem[]
+}
+
+// Конкретний продукт, доданий у щоденник
+model FoodItem {
+  id     Int    @id @default(autoincrement())
+  mealId Int
+  meal   Meal   @relation(fields: [mealId], references: [id], onDelete: Cascade)
+  name   String
+  weight Int
+
+  calories Int
+  proteins Float @default(0)
+  fats     Float @default(0)
+  carbs    Float @default(0)
+}
+
+// Трекер випитої води
+model WaterLog {
+  id     Int      @id @default(autoincrement())
+  userId Int
+  user   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  amount Int
+  date   DateTime @default(now())
+}
+
+// База власних продуктів користувача
+model CustomFood {
+  id     Int    @id @default(autoincrement())
+  userId Int
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name   String
+
+  calories Int
+  proteins Float @default(0)
+  fats     Float @default(0)
+  carbs    Float @default(0)
+}
+
+// База рецептів
+model Recipe {
+  id           Int     @id @default(autoincrement())
+  userId       Int? // null - системний рецепт, ID - власний рецепт користувача
+  user         User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title        String
+  description  String?
+  instructions String?
+  prepTime     Int?
+
+  calories Int
+  proteins Float @default(0)
+  fats     Float @default(0)
+  carbs    Float @default(0)
+}
+
+// ==========================================
+// НОВІ МОДЕЛІ: ЖІНОЧЕ ЗДОРОВ'Я ТА ЦИКЛ
+// ==========================================
+
+// Історія менструацій для календаря та прогнозування
+model CyclePeriod {
+  id            Int       @id @default(autoincrement())
+  userId        Int
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  startDate     DateTime
+  endDate       DateTime?
+  flowIntensity String? // 'LIGHT' | 'MEDIUM' | 'HEAVY'
+  notes         String?
+}
+
+// Щоденний чек-ін: настрій, симптоми, фізична активність та нотатки
+model DailyWellnessLog {
+  id              Int      @id @default(autoincrement())
+  userId          Int
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  date            DateTime // Нормалізована дата (00:00:00 UTC)
+  mood            String? // 'GREAT' | 'GOOD' | 'NEUTRAL' | 'TIRED' | 'IRRITABLE' | 'SAD'
+  energyLevel     Int? // 1..5
+  symptoms        String[] @default([]) // Масив кодів симптомів
+  activityType    String? // 'STRENGTH' | 'CARDIO' | 'YOGA' | 'WALKING' | 'REST'
+  activityMinutes Int?
+  notes           String?
+
+  @@unique([userId, date])
+}
+
+// Список препаратів (КОК, вітаміни, добавки, інші ліки)
+model Medication {
+  id           Int             @id @default(autoincrement())
+  userId       Int
+  user         User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name         String // Напр. "Джаз Плюс", "Вітамін D3", "Магній B6"
+  category     String // 'COC' | 'VITAMIN' | 'OTHER'
+  dosage       String? // Напр. "1 табл.", "2000 МО"
+  cocScheme    String? // Для КОК: '21/7' або '24/4' або '28'
+  packStart    DateTime? // Дата початку поточної упаковки КОК
+  reminderTime String? // Напр. "09:00"
+  isActive     Boolean         @default(true)
+  logs         MedicationLog[]
+}
+
+// Відмітки прийому препаратів по днях
+model MedicationLog {
+  id           Int        @id @default(autoincrement())
+  medicationId Int
+  medication   Medication @relation(fields: [medicationId], references: [id], onDelete: Cascade)
+  date         DateTime // Нормалізована дата (00:00:00 UTC)
+  taken        Boolean    @default(true)
+
+  @@unique([medicationId, date])
+}

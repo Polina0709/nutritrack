@@ -1,0 +1,472 @@
+/* frontend/src/components/DaySummaryModal.css */
+
+.day-summary-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(43, 35, 40, 0.56);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1100;
+    padding: 16px;
+    box-sizing: border-box;
+}
+
+.day-summary-overlay.light {
+    --dsm-modal-bg: #fff0f5;
+    --dsm-sub-bg: #ffe5ef;
+    --dsm-inner-bg: #ffffff;
+    --dsm-border: #f4c6d7;
+    --dsm-shadow: 0 20px 48px rgba(140, 35, 72, 0.25);
+    --dsm-text: #2b2328;
+    --dsm-subtext: #7c5667;
+    --dsm-berry: #c83768;
+    --dsm-berry-hover: #b12c59;
+    --dsm-olive: #4a6b2c;
+    --dsm-water: #0284c7;
+    --dsm-amber: #d97706;
+    --dsm-rec-bg: #eef6e7;
+    --dsm-rec-border: #c5dca8;
+    --dsm-rec-title: #3b5622;
+}
+
+.day-summary-overlay.dark {
+    --dsm-modal-bg: #1f1a24;
+    --dsm-sub-bg: #292230;
+    --dsm-inner-bg: #141118;
+    --dsm-border: #3d3147;
+    --dsm-shadow: 0 22px 50px rgba(0, 0, 0, 0.55);
+    --dsm-text: #f8eef3;
+    --dsm-subtext: #bfa6b4;
+    --dsm-berry: #f472b6;
+    --dsm-berry-hover: #ec4899;
+    --dsm-olive: #8ab85c;
+    --dsm-water: #38bdf8;
+    --dsm-amber: #fbbf24;
+    --dsm-rec-bg: rgba(74, 107, 44, 0.2);
+    --dsm-rec-border: #4a6b2c;
+    --dsm-rec-title: #a3cf76;
+}
+
+/* =========================================================
+   МОДАЛЬНЕ ВІКНО
+   ========================================================= */
+.dsm-modal {
+    background: var(--dsm-modal-bg);
+    color: var(--dsm-text);
+    border: 1.5px solid var(--dsm-border);
+    border-radius: 28px;
+    padding: 24px 26px;
+    width: 100%;
+    max-width: 580px;
+    max-height: 88vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: var(--dsm-shadow);
+    box-sizing: border-box;
+}
+
+.dsm-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.dsm-eyebrow {
+    font-size: 11.5px;
+    color: var(--dsm-subtext);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.dsm-title {
+    margin: 3px 0 0 0;
+    font-size: 19px;
+    font-weight: 700;
+}
+
+.dsm-close-btn {
+    background: var(--dsm-sub-bg);
+    border: 1px solid var(--dsm-border);
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    cursor: pointer;
+    color: var(--dsm-subtext);
+    font-size: 16px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.dsm-close-btn:hover {
+    border-color: var(--dsm-berry);
+    color: var(--dsm-berry);
+}
+
+.dsm-loading {
+    padding: 32px 0;
+    text-align: center;
+    color: var(--dsm-subtext);
+    font-size: 13.5px;
+}
+
+.dsm-body {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+/* =========================================================
+   ФАЗА ЦИКЛУ ТА ПОКАЗНИКИ
+   ========================================================= */
+.dsm-phase-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    background: var(--dsm-sub-bg);
+    border: 1px solid var(--dsm-border);
+    border-radius: 18px;
+    padding: 10px 14px;
+}
+
+.dsm-phase-pill {
+    color: #ffffff;
+    padding: 5px 13px;
+    border-radius: 9999px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.dsm-cycle-day {
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--dsm-subtext);
+}
+
+.dsm-metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 10px;
+}
+
+.dsm-metric-tile {
+    background: var(--dsm-sub-bg);
+    border: 1px solid var(--dsm-border);
+    border-radius: 18px;
+    padding: 12px;
+}
+
+.dsm-metric-label {
+    font-size: 11.5px;
+    color: var(--dsm-subtext);
+}
+
+.dsm-metric-value {
+    font-size: 15.5px;
+    font-weight: 700;
+    margin-top: 3px;
+}
+
+.dsm-metric-sub {
+    font-size: 11px;
+    color: var(--dsm-subtext);
+    margin-top: 2px;
+}
+
+.dsm-dynamic-note {
+    font-size: 10.5px;
+    color: var(--dsm-olive);
+    font-weight: 700;
+    margin-top: 4px;
+}
+
+.dsm-accent-berry {
+    color: var(--dsm-berry);
+}
+
+.dsm-accent-water {
+    color: var(--dsm-water);
+}
+
+.dsm-accent-olive {
+    color: var(--dsm-olive);
+}
+
+/* =========================================================
+   РАЦІОН ДНЯ ТА СТРАВИ
+   ========================================================= */
+.dsm-sub-card {
+    background: var(--dsm-sub-bg);
+    border: 1px solid var(--dsm-border);
+    border-radius: 18px;
+    padding: 12px 14px;
+}
+
+.dsm-ration-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.dsm-block-label {
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--dsm-subtext);
+}
+
+.dsm-block-label--mb {
+    margin-bottom: 8px;
+}
+
+.dsm-muted-hint {
+    font-size: 12px;
+    color: var(--dsm-subtext);
+}
+
+.dsm-toggle-meals-btn {
+    padding: 5px 12px;
+    border-radius: 9999px;
+    border: 1px solid var(--dsm-border);
+    background: var(--dsm-inner-bg);
+    color: var(--dsm-berry);
+    font-size: 11.5px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: border-color 0.15s ease;
+}
+
+.dsm-toggle-meals-btn:hover {
+    border-color: var(--dsm-berry);
+}
+
+.dsm-meals-expanded {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--dsm-border);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.dsm-meal-group-head {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--dsm-text);
+    margin-bottom: 5px;
+}
+
+.dsm-meal-items-list {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.dsm-meal-item-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--dsm-inner-bg);
+    border: 1px solid var(--dsm-border);
+    border-radius: 12px;
+    padding: 6px 10px;
+    font-size: 12px;
+    gap: 8px;
+}
+
+.dsm-item-grams {
+    color: var(--dsm-subtext);
+    font-size: 11px;
+}
+
+.dsm-item-macros {
+    font-size: 10.5px;
+    color: var(--dsm-subtext);
+}
+
+.dsm-item-kcal {
+    color: var(--dsm-text);
+    white-space: nowrap;
+}
+
+/* =========================================================
+   САМОПОЧУТТЯ, СИМПТОМИ ТА ПРЕПАРАТИ
+   ========================================================= */
+.dsm-wellness-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.dsm-energy-badge {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--dsm-amber);
+}
+
+.dsm-chips-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+}
+
+.dsm-chip {
+    padding: 4px 11px;
+    border-radius: 9999px;
+    font-size: 12px;
+}
+
+.dsm-chip--mood {
+    background: rgba(200, 55, 104, 0.16);
+    border: 1px solid var(--dsm-berry);
+    font-weight: 700;
+}
+
+.dsm-chip--activity {
+    background: rgba(74, 107, 44, 0.18);
+    border: 1px solid var(--dsm-olive);
+    font-weight: 700;
+}
+
+.dsm-chip--symptom {
+    background: var(--dsm-inner-bg);
+    border: 1px solid var(--dsm-border);
+}
+
+.dsm-notes-quote {
+    margin-top: 10px;
+    padding-top: 8px;
+    border-top: 1px solid var(--dsm-border);
+    font-size: 12.5px;
+    color: var(--dsm-text);
+    font-style: italic;
+}
+
+.dsm-med-pill {
+    font-size: 11.5px;
+    padding: 4px 11px;
+    border-radius: 9999px;
+}
+
+.dsm-med-pill--taken {
+    background: rgba(74, 107, 44, 0.2);
+    color: var(--dsm-olive);
+    font-weight: 700;
+}
+
+.dsm-med-pill--pending {
+    background: var(--dsm-inner-bg);
+    border: 1px solid var(--dsm-border);
+    color: var(--dsm-subtext);
+}
+
+/* =========================================================
+   ПЕРСОНАЛІЗОВАНІ РЕКОМЕНДАЦІЇ
+   ========================================================= */
+.dsm-recs-heading {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--dsm-text);
+    margin-bottom: 8px;
+}
+
+.dsm-recs-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.dsm-rec-card {
+    background: var(--dsm-rec-bg);
+    border: 1px solid var(--dsm-rec-border);
+    border-radius: 18px;
+    padding: 11px 14px;
+}
+
+.dsm-rec-title {
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--dsm-rec-title);
+    margin-bottom: 3px;
+}
+
+.dsm-rec-category {
+    font-size: 11px;
+    font-weight: 500;
+    opacity: 0.85;
+}
+
+.dsm-rec-text {
+    font-size: 12px;
+    line-height: 1.48;
+    color: var(--dsm-text);
+}
+
+/* =========================================================
+   КНОПКИ ДІЙ У ФУТЕРІ МОДАЛКИ
+   ========================================================= */
+.dsm-footer-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 6px;
+    flex-wrap: wrap;
+}
+
+.dsm-btn-secondary {
+    padding: 9px 16px;
+    border-radius: 9999px;
+    border: 1px solid var(--dsm-border);
+    background: var(--dsm-sub-bg);
+    color: var(--dsm-text);
+    font-size: 12.5px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: border-color 0.15s ease;
+}
+
+.dsm-btn-secondary:hover {
+    border-color: var(--dsm-berry);
+}
+
+.dsm-btn-primary {
+    padding: 9px 20px;
+    border-radius: 9999px;
+    border: none;
+    background: var(--dsm-berry);
+    color: #ffffff;
+    font-size: 12.5px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+}
+
+.dsm-btn-primary:hover {
+    background: var(--dsm-berry-hover);
+}
+
+/* =========================================================
+   АДАПТИВНІСТЬ
+   ========================================================= */
+@media (max-width: 540px) {
+    .dsm-modal {
+        border-radius: 22px;
+        padding: 18px 16px;
+    }
+}

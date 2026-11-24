@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "User" ADD COLUMN     "glassVolume" INTEGER NOT NULL DEFAULT 250;

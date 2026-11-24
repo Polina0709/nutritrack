@@ -1,0 +1,23 @@
+<!-- backend/views/index.ejs -->
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<header>
+    <h1>Вітаємо у <%= title %>!</h1>
+
+    <% if (user) { %>
+        <p>Привіт, <strong><%= user.name %></strong>! Ви успішно авторизовані.</p>
+        <p>Ваша роль: <%= user.role %></p>
+        <a href="/auth/logout" style="color: red; text-decoration: none;">Вийти</a>
+    <% } else { %>
+        <p>Ви увійшли як гість.</p>
+        <a href="/auth/google" style="display: inline-block; padding: 10px 20px; background-color: #4285F4; color: white; text-decoration: none; border-radius: 5px;">Увійти через Google</a>
+    <% } %>
+</header>
+</body>
+</html>

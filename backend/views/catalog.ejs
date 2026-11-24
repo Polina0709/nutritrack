@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Каталог рецептів — NutriTrack</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Berkshire+Swash&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet" />
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: 'Nunito', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #ffd2e1;
+            color: #2b2328;
+        }
+        .header {
+            background: #fff0f5;
+            padding: 18px 28px;
+            border-bottom: 1.5px solid #f4c6d7;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .brand {
+            font-family: 'Berkshire Swash', Georgia, serif;
+            font-size: 32px;
+            color: #4a6b2c;
+            text-decoration: none;
+        }
+        .nav { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+        .pill-btn {
+            padding: 9px 18px;
+            border-radius: 9999px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 700;
+            background: #c83768;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        .pill-btn--soft {
+            background: #ffe6ef;
+            color: #2b2328;
+            border: 1px solid #f4c6d7;
+        }
+        .container {
+            max-width: 1100px;
+            margin: 26px auto;
+            padding: 0 20px 44px;
+        }
+        .search-card {
+            background: #fff0f5;
+            border: 1.5px solid #f4c6d7;
+            border-radius: 24px;
+            padding: 20px 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 22px rgba(200, 55, 104, 0.12);
+        }
+        .search-form {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 12px;
+        }
+        .input, .select {
+            padding: 10px 16px;
+            border-radius: 9999px;
+            border: 1px solid #f4c6d7;
+            background: #ffffff;
+            font-family: inherit;
+            font-size: 13.5px;
+        }
+        .input { flex: 1; min-width: 220px; }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px;
+        }
+        .recipe-card {
+            background: #fff0f5;
+            border: 1.5px solid #f4c6d7;
+            border-radius: 22px;
+            padding: 18px 20px;
+            box-shadow: 0 8px 20px rgba(200, 55, 104, 0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 9999px;
+            font-size: 11px;
+            font-weight: 700;
+            width: fit-content;
+        }
+        .badge--system { background: #4a6b2c; color: #fff; }
+        .badge--user { background: #ffe6ef; color: #7c5667; border: 1px solid #f4c6d7; }
+        .macros {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 6px;
+            background: #ffe6ef;
+            border-radius: 14px;
+            padding: 8px;
+            text-align: center;
+            font-size: 12px;
+        }
+        .macros strong { display: block; color: #c83768; font-size: 13.5px; }
+    </style>
+</head>
+<body>
+<header class="header">
+    <a href="/" class="brand">NutriTrack</a>
+    <nav class="nav">
+        <a href="/about.html" class="pill-btn pill-btn--soft">ℹ️ Про проєкт</a>
+        <% if (user && user.role === 'ADMIN') { %>
+            <a href="/admin" class="pill-btn pill-btn--soft">🛡️ Адмін-панель</a>
+        <% } %>
+        <a href="/" class="pill-btn">← У застосунок</a>
+    </nav>
+</header>
+
+<main class="container">
+    <section class="search-card">
+        <h1 style="margin: 0; font-size: 22px;">📖 Динамічний каталог рецептів (Server-Side Rendering)</h1>
+        <p style="margin: 4px 0 0 0; font-size: 13px; color: #7c5667;">
+            Сторінка генерується безпосередньо на сервері Express + EJS із бази даних PostgreSQL. Знайдено рецептів: <strong><%= recipes.length %></strong>
+        </p>
+
+        <form method="GET" action="/catalog" class="search-form">
+            <input
+                    type="text"
+                    name="q"
+                    value="<%= q %>"
+                    placeholder="Пошук за назвою або інгредієнтом..."
+                    class="input"
+            />
+            <select name="scope" class="select">
+                <option value="all" <%= scope === 'all' ? 'selected' : '' %>>Усі рецепти</option>
+                <option value="system" <%= scope === 'system' ? 'selected' : '' %>>Лише системні від NutriTrack</option>
+            </select>
+            <button type="submit" class="pill-btn">🔍 Знайти</button>
+        </form>
+    </section>
+
+    <% if (recipes.length === 0) { %>
+        <div class="search-card" style="text-align: center; color: #7c5667;">
+            За вашим запитом рецептів не знайдено.
+        </div>
+    <% } else { %>
+        <div class="grid">
+            <% recipes.forEach((r) => { %>
+                <article class="recipe-card">
+                    <% if (r.userId === null) { %>
+                        <span class="badge badge--system">🌿 Системний рецепт</span>
+                    <% } else { %>
+                        <span class="badge badge--user">👩‍🍳 Автор: <%= r.user?.name || 'Користувач' %></span>
+                    <% } %>
+
+                    <h3 style="margin: 0; font-size: 17px;"><%= r.title %></h3>
+
+                    <% if (r.description) { %>
+                        <p style="margin: 0; font-size: 13px; color: #543d48;"><%= r.description %></p>
+                    <% } %>
+
+                    <div class="macros">
+                        <div><strong><%= r.calories %></strong>Ккал</div>
+                        <div><strong><%= r.proteins %>г</strong>Білки</div>
+                        <div><strong><%= r.fats %>г</strong>Жири</div>
+                        <div><strong><%= r.carbs %>г</strong>Вугл.</div>
+                    </div>
+
+                    <% if (r.prepTime) { %>
+                        <div style="font-size: 12px; color: #7c5667;">⏱️ Час приготування: <strong><%= r.prepTime %> хв</strong></div>
+                    <% } %>
+                </article>
+            <% }) %>
+        </div>
+    <% } %>
+</main>
+</body>
+</html>

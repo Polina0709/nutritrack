@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Про проєкт — NutriTrack</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Berkshire+Swash&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet" />
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: 'Nunito', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #ffd2e1;
+            color: #2b2328;
+        }
+        .header {
+            background: #fff0f5;
+            padding: 18px 28px;
+            border-bottom: 1.5px solid #f4c6d7;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .brand {
+            font-family: 'Berkshire Swash', Georgia, serif;
+            font-size: 32px;
+            color: #4a6b2c;
+            text-decoration: none;
+        }
+        .nav { display: flex; gap: 10px; flex-wrap: wrap; }
+        .pill-btn {
+            padding: 9px 18px;
+            border-radius: 9999px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 700;
+            background: #c83768;
+            color: #fff;
+        }
+        .pill-btn--soft {
+            background: #ffe6ef;
+            color: #2b2328;
+            border: 1px solid #f4c6d7;
+        }
+        .container {
+            max-width: 960px;
+            margin: 30px auto;
+            padding: 0 20px 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+        .card {
+            background: #fff0f5;
+            border: 1.5px solid #f4c6d7;
+            border-radius: 24px;
+            padding: 24px 28px;
+            box-shadow: 0 8px 24px rgba(200, 55, 104, 0.12);
+        }
+        h1 { margin: 0 0 10px 0; color: #4a6b2c; font-size: 26px; }
+        h2 { margin: 0 0 10px 0; color: #c83768; font-size: 18px; }
+        p { margin: 0 0 10px 0; line-height: 1.6; color: #543d48; }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 14px;
+            margin-top: 12px;
+        }
+        .tile {
+            background: #ffe6ef;
+            border: 1px solid #f4c6d7;
+            border-radius: 18px;
+            padding: 16px;
+        }
+        .tile strong { display: block; margin-bottom: 6px; color: #2b2328; }
+    </style>
+</head>
+<body>
+<header class="header">
+    <a href="/" class="brand">NutriTrack</a>
+    <nav class="nav">
+        <a href="/catalog" class="pill-btn pill-btn--soft">📖 Каталог рецептів (SSR)</a>
+        <a href="/" class="pill-btn">← На головну</a>
+    </nav>
+</header>
+
+<main class="container">
+    <section class="card">
+        <h1>🌿 Про платформу NutriTrack</h1>
+        <p>
+            <strong>NutriTrack</strong> — це персональний веб-сервіс для збалансованого контролю харчування,
+            водного балансу, динаміки ваги та жіночого здоров’я з урахуванням фаз менструального циклу.
+        </p>
+        <p>
+            Застосунок поєднує науково обґрунтований розрахунок норм КБЖВ (за формулою Міффліна — Сан-Жеора),
+            базу продуктів FatSecret, конструктор власних рецептів та інтелектуальні нагадування.
+        </p>
+    </section>
+
+    <section class="card">
+        <h2>✨ Основні можливості сервісу</h2>
+        <div class="grid">
+            <div class="tile">
+                <strong>🍽️ Щоденник харчування та FatSecret</strong>
+                Миттєвий пошук продуктів у глобальній базі, власна бібліотека страв і автоматичний підрахунок калорій та макронутрієнтів.
+            </div>
+            <div class="tile">
+                <strong>💧 Трекер водного балансу</strong>
+                Індивідуальна денна норма води, швидке додавання склянок та попередження про надмірне споживання рідини.
+            </div>
+            <div class="tile">
+                <strong>🌸 Календар циклу та самопочуття</strong>
+                Прогноз фаз циклу, адаптація норми калорій під фазу та фізичну активність, контроль прийому вітамінів і КОК.
+            </div>
+        </div>
+    </section>
+</main>
+</body>
+</html>

@@ -1,0 +1,938 @@
+/* frontend/src/components/SearchModal.css */
+
+.search-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(43, 35, 40, 0.56);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 16px;
+    box-sizing: border-box;
+}
+
+.search-modal-overlay.light {
+    --sm-modal-bg: #fff0f5;
+    --sm-sub-bg: #ffe5ef;
+    --sm-inner-bg: #ffffff;
+    --sm-border: #f4c6d7;
+    --sm-shadow: 0 20px 48px rgba(140, 35, 72, 0.25);
+    --sm-text: #2b2328;
+    --sm-subtext: #7c5667;
+    --sm-berry: #c83768;
+    --sm-berry-hover: #b12c59;
+    --sm-olive: #4a6b2c;
+    --sm-olive-hover: #3b5622;
+    --sm-amber: #d97706;
+    --sm-amber-hover: #b45309;
+    --sm-amber-bg: #fff8e7;
+    --sm-amber-border: #fcd34d;
+    --sm-macro-bg: #eaf6ff;
+    --sm-macro-border: #b8e1fa;
+    --sm-macro-text: #0369a1;
+    --sm-danger: #d32f2f;
+    --sm-danger-bg: rgba(211, 47, 47, 0.12);
+    --sm-danger-border: rgba(211, 47, 47, 0.32);
+}
+
+.search-modal-overlay.dark {
+    --sm-modal-bg: #1f1a24;
+    --sm-sub-bg: #292230;
+    --sm-inner-bg: #141118;
+    --sm-border: #3d3147;
+    --sm-shadow: 0 22px 50px rgba(0, 0, 0, 0.55);
+    --sm-text: #f8eef3;
+    --sm-subtext: #bfa6b4;
+    --sm-berry: #f472b6;
+    --sm-berry-hover: #ec4899;
+    --sm-olive: #8ab85c;
+    --sm-olive-hover: #739e48;
+    --sm-amber: #fbbf24;
+    --sm-amber-hover: #f59e0b;
+    --sm-amber-bg: rgba(217, 119, 6, 0.16);
+    --sm-amber-border: rgba(251, 191, 36, 0.4);
+    --sm-macro-bg: #162231;
+    --sm-macro-border: #26405e;
+    --sm-macro-text: #7dd3fc;
+    --sm-danger: #f87171;
+    --sm-danger-bg: rgba(248, 113, 113, 0.16);
+    --sm-danger-border: rgba(248, 113, 113, 0.35);
+}
+
+/* =========================================================
+   МОДАЛЬНЕ ВІКНО ТА КНОПКА ЗАКРИТТЯ
+   ========================================================= */
+.sm-modal {
+    background: var(--sm-modal-bg);
+    color: var(--sm-text);
+    border: 1.5px solid var(--sm-border);
+    border-radius: 28px;
+    padding: 22px 24px;
+    width: 100%;
+    max-width: 540px;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    box-shadow: var(--sm-shadow);
+    box-sizing: border-box;
+}
+
+.sm-close-btn {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: var(--sm-sub-bg);
+    border: 1px solid var(--sm-border);
+    border-radius: 50%;
+    width: 34px;
+    height: 34px;
+    font-size: 15px;
+    cursor: pointer;
+    color: var(--sm-subtext);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.sm-close-btn:hover {
+    border-color: var(--sm-berry);
+    color: var(--sm-berry);
+}
+
+.sm-modal-title {
+    margin: 0 0 14px 0;
+    padding-right: 36px;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.sm-flex-col-full {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+}
+
+.sm-flex-1 {
+    flex: 1;
+}
+
+.sm-scroll-body {
+    flex: 1;
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+/* =========================================================
+   ВКЛАДКИ-ПІГУЛКИ ТА СЕГМЕНТОВАНИЙ ПЕРЕМИКАЧ
+   ========================================================= */
+.sm-tabs {
+    display: flex;
+    gap: 6px;
+    background: var(--sm-sub-bg);
+    border: 1px solid var(--sm-border);
+    border-radius: 9999px;
+    padding: 4px;
+    margin-bottom: 14px;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+.sm-tab-btn {
+    flex: 1;
+    padding: 8px 12px;
+    background: transparent;
+    border: none;
+    border-radius: 9999px;
+    font-family: inherit;
+    font-weight: 600;
+    color: var(--sm-subtext);
+    cursor: pointer;
+    font-size: 13px;
+    transition: all 0.15s ease;
+}
+
+.sm-tab-btn:hover {
+    color: var(--sm-text);
+}
+
+.sm-tab-btn.active {
+    background: var(--sm-berry);
+    color: #ffffff;
+    font-weight: 700;
+}
+
+.sm-seg-switch {
+    display: flex;
+    gap: 6px;
+    background: var(--sm-sub-bg);
+    border: 1px solid var(--sm-border);
+    border-radius: 9999px;
+    padding: 4px;
+    margin-bottom: 12px;
+}
+
+.sm-seg-btn {
+    flex: 1;
+    padding: 7px 12px;
+    background: transparent;
+    color: var(--sm-subtext);
+    border: none;
+    border-radius: 9999px;
+    font-family: inherit;
+    font-size: 12.5px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.sm-seg-btn.active {
+    background: var(--sm-berry);
+    color: #ffffff;
+}
+
+/* =========================================================
+   ПОШУК ТА АВТОДОПОВНЕННЯ
+   ========================================================= */
+.sm-search-rel {
+    position: relative;
+    margin-bottom: 14px;
+}
+
+.sm-search-form {
+    display: flex;
+    gap: 8px;
+}
+
+.sm-search-input {
+    flex: 1;
+    padding: 9px 14px;
+    border-radius: 9999px;
+    border: 1px solid var(--sm-border);
+    background: var(--sm-inner-bg);
+    color: var(--sm-text);
+    font-family: inherit;
+    font-size: 13.5px;
+    outline: none;
+    transition: border-color 0.15s ease;
+}
+
+.sm-search-input:focus {
+    border-color: var(--sm-berry);
+}
+
+.sm-search-input--full {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.sm-clear-input-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.sm-search-input--clearable {
+    width: 100%;
+    padding-right: 34px;
+    box-sizing: border-box;
+}
+
+.sm-clear-btn {
+    position: absolute;
+    right: 10px;
+    background: transparent;
+    border: none;
+    color: var(--sm-subtext);
+    cursor: pointer;
+    font-size: 14px;
+    padding: 2px 5px;
+}
+
+.sm-clear-btn:hover {
+    color: var(--sm-berry);
+}
+
+.sm-search-submit {
+    padding: 9px 18px;
+    background: var(--sm-berry);
+    color: #ffffff;
+    border: none;
+    border-radius: 9999px;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 13px;
+    white-space: nowrap;
+    transition: background-color 0.15s ease;
+}
+
+.sm-search-submit:hover:not(:disabled) {
+    background: var(--sm-berry-hover);
+}
+
+.sm-search-submit:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+}
+
+.sm-search-submit--amber {
+    background: var(--sm-amber);
+}
+
+.sm-search-submit--amber:hover {
+    background: var(--sm-amber-hover);
+}
+
+.sm-autocomplete {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--sm-inner-bg);
+    border: 1.5px solid var(--sm-border);
+    border-radius: 18px;
+    box-shadow: var(--sm-shadow);
+    z-index: 30;
+    max-height: 220px;
+    overflow-y: auto;
+    margin-top: 6px;
+}
+
+.sm-autocomplete-status {
+    padding: 10px 14px;
+    font-size: 12px;
+    color: var(--sm-subtext);
+}
+
+.sm-autocomplete-item {
+    padding: 9px 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    border-bottom: 1px solid var(--sm-border);
+    font-size: 12.5px;
+    transition: background-color 0.12s ease;
+}
+
+.sm-autocomplete-item:last-child {
+    border-bottom: none;
+}
+
+.sm-autocomplete-item:hover {
+    background: var(--sm-sub-bg);
+}
+
+.sm-autocomplete-meta {
+    color: var(--sm-subtext);
+    margin-left: 6px;
+    font-size: 11px;
+}
+
+.sm-autocomplete-kcal {
+    color: var(--sm-berry);
+    font-weight: 700;
+    white-space: nowrap;
+    margin-left: 8px;
+}
+
+.sm-autocomplete-kcal--amber {
+    color: var(--sm-amber);
+}
+
+.sm-error-msg {
+    color: var(--sm-danger);
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+/* =========================================================
+   СІТКА ПРОДУКТІВ ТА РЕЦЕПТІВ
+   ========================================================= */
+.sm-products-grid {
+    flex: 1;
+    overflow-y: auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(135px, 1fr));
+    gap: 10px;
+    padding-right: 4px;
+}
+
+.sm-product-card {
+    border: 1px solid var(--sm-border);
+    padding: 12px 10px;
+    border-radius: 18px;
+    text-align: center;
+    cursor: pointer;
+    position: relative;
+    background: var(--sm-sub-bg);
+    transition: transform 0.15s ease, border-color 0.15s ease;
+}
+
+.sm-product-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--sm-berry);
+}
+
+.sm-product-card--recipe {
+    background: var(--sm-amber-bg);
+    border-color: var(--sm-amber-border);
+}
+
+.sm-card-delete-btn {
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    background: var(--sm-danger-bg);
+    color: var(--sm-danger);
+    border: none;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    font-size: 11px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
+
+.sm-rating-badge {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    color: #ffffff;
+    font-size: 9.5px;
+    padding: 2px 7px;
+    border-radius: 9999px;
+    font-weight: 700;
+}
+
+.sm-rating--high {
+    background: var(--sm-olive);
+}
+
+.sm-rating--mid {
+    background: var(--sm-amber);
+}
+
+.sm-rating--low {
+    background: #e11d48;
+}
+
+.sm-product-img {
+    width: 54px;
+    height: 54px;
+    object-fit: contain;
+    margin-bottom: 6px;
+    border-radius: 10px;
+}
+
+.sm-recipe-emoji {
+    font-size: 30px;
+    margin-bottom: 5px;
+}
+
+.sm-product-title {
+    margin: 0 0 4px 0;
+    font-size: 11.5px;
+    height: 30px;
+    overflow: hidden;
+    line-height: 1.3;
+    color: var(--sm-text);
+}
+
+.sm-product-title--recipe {
+    font-size: 12px;
+}
+
+.sm-product-kcal {
+    margin: 0;
+    font-size: 11.5px;
+    color: var(--sm-berry);
+    font-weight: 700;
+}
+
+.sm-product-kcal--amber {
+    color: var(--sm-amber);
+}
+
+.sm-empty-msg {
+    grid-column: 1 / -1;
+    text-align: center;
+    color: var(--sm-subtext);
+    font-size: 13px;
+    padding: 16px 0;
+}
+
+/* =========================================================
+   ДЕТАЛЬНИЙ ПЕРЕГЛЯД ПРОДУКТУ / РЕЦЕПТУ
+   ========================================================= */
+.sm-detail-header {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 14px;
+    padding-right: 34px;
+}
+
+.sm-detail-icon {
+    width: 56px;
+    height: 56px;
+    background: var(--sm-sub-bg);
+    border: 1px solid var(--sm-border);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    flex-shrink: 0;
+}
+
+.sm-detail-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.sm-detail-title {
+    margin: 0 0 3px 0;
+    font-size: 15.5px;
+    font-weight: 700;
+}
+
+.sm-detail-sub {
+    margin: 0;
+    color: var(--sm-subtext);
+    font-size: 12px;
+}
+
+.sm-detail-score {
+    color: #ffffff;
+    padding: 6px 11px;
+    border-radius: 14px;
+    text-align: center;
+    min-width: 52px;
+    flex-shrink: 0;
+}
+
+.sm-detail-score-val {
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.sm-detail-score-cap {
+    font-size: 9px;
+    text-transform: uppercase;
+}
+
+.sm-weight-box {
+    background: var(--sm-sub-bg);
+    border: 1px solid var(--sm-border);
+    padding: 12px 14px;
+    border-radius: 18px;
+    margin-bottom: 12px;
+}
+
+.sm-weight-label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 700;
+    font-size: 13px;
+}
+
+.sm-weight-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.sm-range-input {
+    flex: 1;
+    accent-color: var(--sm-berry);
+    cursor: pointer;
+}
+
+.sm-weight-number {
+    width: 74px;
+    padding: 6px 8px;
+    border-radius: 12px;
+    border: 1px solid var(--sm-border);
+    background: var(--sm-inner-bg);
+    color: var(--sm-text);
+    font-family: inherit;
+    font-weight: 700;
+    text-align: center;
+}
+
+.sm-macro-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    background: var(--sm-macro-bg);
+    border: 1px solid var(--sm-macro-border);
+    padding: 11px 8px;
+    border-radius: 18px;
+    margin-bottom: 12px;
+    text-align: center;
+    color: var(--sm-macro-text);
+}
+
+.sm-macro-val {
+    display: block;
+    font-size: 14.5px;
+    font-weight: 700;
+}
+
+.sm-macro-cap {
+    font-size: 10.5px;
+    opacity: 0.85;
+}
+
+.sm-insights-box {
+    background: var(--sm-sub-bg);
+    border: 1px solid var(--sm-border);
+    padding: 12px 14px;
+    border-radius: 18px;
+    margin-bottom: 12px;
+}
+
+.sm-insights-title {
+    margin: 0 0 6px 0;
+    font-size: 13px;
+    color: var(--sm-text);
+}
+
+.sm-insights-list {
+    padding-left: 18px;
+    margin: 0;
+    font-size: 12px;
+    color: var(--sm-subtext);
+}
+
+.sm-insights-list li {
+    margin-bottom: 4px;
+}
+
+.sm-recipe-instructions {
+    background: var(--sm-amber-bg);
+    border: 1px solid var(--sm-amber-border);
+    padding: 12px 14px;
+    border-radius: 18px;
+    margin-bottom: 12px;
+    font-size: 12px;
+    line-height: 1.45;
+    white-space: pre-line;
+    color: var(--sm-text);
+}
+
+/* =========================================================
+   ФОРМИ ТА КОНСТРУКТОР РЕЦЕПТІВ
+   ========================================================= */
+.sm-builder-title,
+.sm-create-title {
+    margin: 0 0 14px 0;
+    font-size: 16.5px;
+    color: var(--sm-berry);
+    padding-right: 32px;
+}
+
+.sm-input {
+    width: 100%;
+    padding: 9px 13px;
+    border-radius: 14px;
+    border: 1px solid var(--sm-border);
+    background: var(--sm-inner-bg);
+    color: var(--sm-text);
+    font-family: inherit;
+    font-size: 13px;
+    box-sizing: border-box;
+    outline: none;
+    transition: border-color 0.15s ease;
+}
+
+.sm-input:focus,
+.sm-textarea:focus {
+    border-color: var(--sm-berry);
+}
+
+.sm-input--bold {
+    font-weight: 700;
+}
+
+.sm-textarea {
+    width: 100%;
+    padding: 10px 13px;
+    border-radius: 16px;
+    border: 1px solid var(--sm-border);
+    background: var(--sm-inner-bg);
+    color: var(--sm-text);
+    font-family: inherit;
+    font-size: 13px;
+    box-sizing: border-box;
+    resize: vertical;
+    outline: none;
+}
+
+.sm-grid-3-macros {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 18px;
+}
+
+.sm-ing-box {
+    background: var(--sm-sub-bg);
+    border: 1px solid var(--sm-border);
+    border-radius: 18px;
+    padding: 12px 14px;
+    margin-bottom: 14px;
+}
+
+.sm-ing-header {
+    margin: 0 0 10px 0;
+    font-size: 13px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.sm-amber-text {
+    color: var(--sm-amber);
+}
+
+.sm-ing-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12.5px;
+    padding: 6px 0;
+    border-bottom: 1px dashed var(--sm-border);
+}
+
+.sm-ing-row-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.sm-ing-kcal {
+    color: var(--sm-subtext);
+}
+
+.sm-ing-remove-btn {
+    background: none;
+    border: none;
+    color: var(--sm-danger);
+    cursor: pointer;
+    font-weight: 700;
+}
+
+.sm-recipe-macro-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    background: var(--sm-amber-bg);
+    border: 1px solid var(--sm-amber-border);
+    padding: 11px 8px;
+    border-radius: 18px;
+    margin-bottom: 14px;
+    text-align: center;
+}
+
+.sm-recipe-macro-head {
+    grid-column: 1 / -1;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--sm-amber);
+    margin-bottom: 4px;
+}
+
+.sm-recipe-macro-val {
+    display: block;
+    font-size: 14px;
+    color: var(--sm-amber);
+    font-weight: 700;
+}
+
+.sm-weight-ing-title {
+    margin: 0 0 14px 0;
+    font-size: 15px;
+}
+
+.sm-unit-label {
+    font-weight: 700;
+    color: var(--sm-subtext);
+}
+
+/* =========================================================
+   КНОПКИ ДІЙ
+   ========================================================= */
+.sm-dashed-btn {
+    width: 100%;
+    padding: 10px 14px;
+    background: rgba(200, 55, 104, 0.08);
+    color: var(--sm-berry);
+    border: 1.5px dashed var(--sm-berry);
+    border-radius: 9999px;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 13px;
+    transition: background-color 0.15s ease;
+}
+
+.sm-dashed-btn:hover {
+    background: rgba(200, 55, 104, 0.15);
+}
+
+.sm-dashed-btn--amber {
+    background: var(--sm-amber-bg);
+    color: var(--sm-amber);
+    border-color: var(--sm-amber);
+}
+
+.sm-dashed-btn--amber:hover {
+    opacity: 0.9;
+}
+
+.sm-footer-actions {
+    display: flex;
+    gap: 10px;
+    padding-top: 12px;
+    border-top: 1px solid var(--sm-border);
+    margin-top: 10px;
+}
+
+.sm-footer-actions--plain {
+    border-top: none;
+    padding-top: 0;
+    margin-top: 0;
+}
+
+.sm-btn-secondary {
+    flex: 1;
+    padding: 10px 16px;
+    background: var(--sm-sub-bg);
+    color: var(--sm-text);
+    border: 1px solid var(--sm-border);
+    border-radius: 9999px;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 13px;
+    transition: border-color 0.15s ease;
+}
+
+.sm-btn-secondary:hover {
+    border-color: var(--sm-berry);
+}
+
+.sm-btn-primary {
+    flex: 2;
+    padding: 10px 18px;
+    background: var(--sm-berry);
+    color: #ffffff;
+    border: none;
+    border-radius: 9999px;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 13px;
+    transition: background-color 0.15s ease;
+}
+
+.sm-btn-primary:hover {
+    background: var(--sm-berry-hover);
+}
+
+.sm-btn-olive {
+    flex: 2;
+    padding: 10px 18px;
+    background: var(--sm-olive);
+    color: #ffffff;
+    border: none;
+    border-radius: 9999px;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 13px;
+    transition: background-color 0.15s ease;
+}
+
+.sm-btn-olive:hover {
+    background: var(--sm-olive-hover);
+}
+
+.sm-btn-amber {
+    flex: 2;
+    padding: 10px 18px;
+    background: var(--sm-amber);
+    color: #ffffff;
+    border: none;
+    border-radius: 9999px;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 13px;
+    transition: background-color 0.15s ease;
+}
+
+.sm-btn-amber:hover {
+    background: var(--sm-amber-hover);
+}
+
+.sm-btn-danger-icon {
+    padding: 10px 14px;
+    background: var(--sm-danger-bg);
+    color: var(--sm-danger);
+    border: 1px solid var(--sm-danger-border);
+    border-radius: 9999px;
+    cursor: pointer;
+    font-weight: 700;
+}
+
+.sm-btn-full {
+    width: 100%;
+    flex: none;
+}
+
+/* Допоміжні відступи */
+.sm-mt-10 {
+    margin-top: 10px;
+}
+
+.sm-mb-10 {
+    margin-bottom: 10px;
+}
+
+.sm-mb-12 {
+    margin-bottom: 12px;
+}
+
+.sm-mb-14 {
+    margin-bottom: 14px;
+}
+
+.sm-mb-18 {
+    margin-bottom: 18px;
+}
+
+/* =========================================================
+   АДАПТИВНІСТЬ
+   ========================================================= */
+@media (max-width: 540px) {
+    .sm-modal {
+        border-radius: 22px;
+        padding: 18px 16px;
+    }
+
+    .sm-products-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}

@@ -1,0 +1,374 @@
+/* frontend/src/components/MyFoodsRecipesSection.css */
+
+.my-foods-recipes-section {
+    background: var(--mfr-card-bg);
+    border-radius: 28px;
+    padding: 22px 24px;
+    margin-top: 8px;
+    color: var(--mfr-text);
+    box-shadow: var(--mfr-shadow);
+    box-sizing: border-box;
+}
+
+.my-foods-recipes-section.light {
+    --mfr-card-bg: #fff0f5;
+    --mfr-sub-bg: #ffe5ef;
+    --mfr-input-bg: #ffffff;
+    --mfr-pill-bg: #ffd9e7;
+    --mfr-border: #f4c6d7;
+    --mfr-shadow: 0 8px 24px rgba(200, 55, 104, 0.14);
+    --mfr-text: #2b2328;
+    --mfr-subtext: #7c5667;
+    --mfr-berry: #c83768;
+    --mfr-berry-hover: #b12c59;
+    --mfr-olive: #4a6b2c;
+    --mfr-olive-hover: #3b5622;
+    --mfr-danger: #e11d48;
+}
+
+.my-foods-recipes-section.dark {
+    --mfr-card-bg: #1f1a24;
+    --mfr-sub-bg: #292230;
+    --mfr-input-bg: #141118;
+    --mfr-pill-bg: #141118;
+    --mfr-border: #3d3147;
+    --mfr-shadow: 0 10px 26px rgba(0, 0, 0, 0.35);
+    --mfr-text: #f8eef3;
+    --mfr-subtext: #bfa6b4;
+    --mfr-berry: #f472b6;
+    --mfr-berry-hover: #ec4899;
+    --mfr-olive: #8ab85c;
+    --mfr-olive-hover: #739e48;
+    --mfr-danger: #fb7185;
+}
+
+/* =========================================================
+   ШАПКА ТА ВКЛАДКИ (ПРОДУКТИ / РЕЦЕПТИ)
+   ========================================================= */
+.mfr-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.mfr-title {
+    margin: 0;
+    font-size: 17px;
+    font-weight: 700;
+}
+
+.mfr-tabs {
+    display: flex;
+    gap: 6px;
+    background: var(--mfr-pill-bg);
+    padding: 4px;
+    border-radius: 9999px;
+}
+
+.mfr-tab-btn {
+    padding: 7px 16px;
+    border-radius: 9999px;
+    border: none;
+    background: transparent;
+    color: var(--mfr-text);
+    font-weight: 600;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.mfr-tab-btn:hover:not(.active) {
+    background: rgba(200, 55, 104, 0.08);
+}
+
+.mfr-tab-btn--foods.active {
+    background: var(--mfr-berry);
+    color: #ffffff;
+    font-weight: 700;
+}
+
+.mfr-tab-btn--recipes.active {
+    background: var(--mfr-olive);
+    color: #ffffff;
+    font-weight: 700;
+}
+
+/* =========================================================
+   ПАНЕЛЬ ПОШУКУ ТА КНОПКА СТВОРЕННЯ
+   ========================================================= */
+.mfr-toolbar {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+}
+
+.mfr-input {
+    width: 100%;
+    padding: 9px 14px;
+    border-radius: 16px;
+    border: 1px solid var(--mfr-border);
+    background: var(--mfr-input-bg);
+    color: var(--mfr-text);
+    box-sizing: border-box;
+    font-family: inherit;
+    font-size: 13px;
+    outline: none;
+    transition: border-color 0.15s ease;
+}
+
+.mfr-input:focus {
+    border-color: var(--mfr-berry);
+}
+
+.mfr-search-input {
+    flex: 1;
+    min-width: 210px;
+    border-radius: 9999px;
+}
+
+.mfr-create-toggle-btn {
+    padding: 9px 18px;
+    border-radius: 9999px;
+    border: none;
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background-color 0.15s ease, transform 0.15s ease;
+}
+
+.mfr-create-toggle-btn--foods {
+    background: var(--mfr-berry);
+}
+
+.mfr-create-toggle-btn--foods:hover {
+    background: var(--mfr-berry-hover);
+}
+
+.mfr-create-toggle-btn--recipes {
+    background: var(--mfr-olive);
+}
+
+.mfr-create-toggle-btn--recipes:hover {
+    background: var(--mfr-olive-hover);
+}
+
+.mfr-create-toggle-btn.is-open {
+    background: var(--mfr-subtext);
+}
+
+/* =========================================================
+   ФОРМИ СТВОРЕННЯ ПРОДУКТУ / РЕЦЕПТА
+   ========================================================= */
+.mfr-create-form {
+    background: var(--mfr-sub-bg);
+    border: 1px solid var(--mfr-border);
+    border-radius: 22px;
+    padding: 16px;
+    margin-bottom: 18px;
+}
+
+.mfr-form-row {
+    margin-bottom: 10px;
+}
+
+.mfr-form-row-sm {
+    margin-bottom: 8px;
+}
+
+.mfr-grid-4 {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+}
+
+.mfr-grid-title-time {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 8px;
+}
+
+.mfr-textarea {
+    resize: vertical;
+}
+
+.mfr-submit-btn {
+    width: 100%;
+    padding: 10px 16px;
+    color: #ffffff;
+    border: none;
+    border-radius: 9999px;
+    font-weight: 700;
+    font-size: 13.5px;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+}
+
+.mfr-submit-btn--foods {
+    background: var(--mfr-berry);
+}
+
+.mfr-submit-btn--foods:hover {
+    background: var(--mfr-berry-hover);
+}
+
+.mfr-submit-btn--recipes {
+    background: var(--mfr-olive);
+}
+
+.mfr-submit-btn--recipes:hover {
+    background: var(--mfr-olive-hover);
+}
+
+/* =========================================================
+   СПИСОК ЕЛЕМЕНТІВ ТА ШВИДКЕ ДОДАВАННЯ В ЩОДЕННИК
+   ========================================================= */
+.mfr-items-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.mfr-empty-text {
+    margin: 0;
+    font-size: 13px;
+    color: var(--mfr-subtext);
+    font-style: italic;
+}
+
+.mfr-item-card {
+    background: var(--mfr-sub-bg);
+    border: 1px solid var(--mfr-border);
+    border-radius: 20px;
+    padding: 12px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.mfr-item-card--recipe {
+    align-items: flex-start;
+    padding: 14px 16px;
+}
+
+.mfr-item-info--recipe {
+    flex: 1;
+    min-width: 220px;
+}
+
+.mfr-item-name {
+    font-weight: 700;
+    font-size: 14.5px;
+}
+
+.mfr-prep-time {
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--mfr-subtext);
+}
+
+.mfr-item-macros {
+    font-size: 12px;
+    color: var(--mfr-subtext);
+    margin-top: 2px;
+}
+
+.mfr-item-macros--spaced {
+    margin-top: 3px;
+}
+
+.mfr-recipe-instructions {
+    font-size: 12.5px;
+    color: var(--mfr-text);
+    margin-top: 7px;
+    line-height: 1.45;
+    opacity: 0.9;
+}
+
+.mfr-quick-actions {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    flex-wrap: wrap;
+}
+
+.mfr-select-compact {
+    width: auto;
+    padding: 6px 10px;
+    border-radius: 9999px;
+    font-size: 12.5px;
+}
+
+.mfr-weight-input {
+    width: 68px;
+    padding: 6px 10px;
+    border-radius: 9999px;
+    font-size: 12.5px;
+    text-align: center;
+}
+
+.mfr-quick-add-btn {
+    padding: 7px 14px;
+    color: #ffffff;
+    border: none;
+    border-radius: 9999px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 700;
+    transition: background-color 0.15s ease;
+}
+
+.mfr-quick-add-btn--foods {
+    background: var(--mfr-berry);
+}
+
+.mfr-quick-add-btn--foods:hover {
+    background: var(--mfr-berry-hover);
+}
+
+.mfr-quick-add-btn--recipes {
+    background: var(--mfr-olive);
+}
+
+.mfr-quick-add-btn--recipes:hover {
+    background: var(--mfr-olive-hover);
+}
+
+.mfr-delete-btn {
+    background: transparent;
+    border: none;
+    color: var(--mfr-danger);
+    cursor: pointer;
+    font-size: 16px;
+    padding: 4px 6px;
+    border-radius: 50%;
+    transition: background-color 0.15s ease;
+}
+
+.mfr-delete-btn:hover {
+    background: rgba(225, 29, 72, 0.1);
+}
+
+/* =========================================================
+   АДАПТИВНІСТЬ
+   ========================================================= */
+@media (max-width: 580px) {
+    .my-foods-recipes-section {
+        border-radius: 22px;
+        padding: 16px;
+    }
+
+    .mfr-grid-4 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .mfr-grid-title-time {
+        grid-template-columns: 1fr;
+    }
+}

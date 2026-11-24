@@ -1,0 +1,654 @@
+/* frontend/src/components/WeightProgressSection.css */
+
+.weight-progress-section {
+    background: var(--wps-card-bg);
+    border: 1px solid var(--wps-border);
+    border-radius: 24px;
+    padding: 22px 24px;
+    color: var(--wps-text);
+    box-shadow: var(--wps-shadow);
+    box-sizing: border-box;
+}
+
+.weight-progress-section.light {
+    --wps-card-bg: #fff0f5;
+    --wps-sub-bg: #ffe5ef;
+    --wps-inner-bg: #ffffff;
+    --wps-border: #f4c6d7;
+    --wps-track-bg: #f6d5e3;
+    --wps-shadow: 0 8px 22px rgba(200, 55, 104, 0.12);
+    --wps-text: #2b2328;
+    --wps-subtext: #7c5667;
+    --wps-berry: #c83768;
+    --wps-berry-hover: #b12c59;
+    --wps-olive: #4a6b2c;
+    --wps-olive-hover: #3b5622;
+    --wps-purple: #7e22ce;
+    --wps-purple-hover: #6b21a8;
+    --wps-amber: #d97706;
+    --wps-danger: #d32f2f;
+    --wps-danger-bg: rgba(211, 47, 47, 0.1);
+}
+
+.weight-progress-section.dark {
+    --wps-card-bg: #1f1a24;
+    --wps-sub-bg: #292230;
+    --wps-inner-bg: #141118;
+    --wps-border: #3d3147;
+    --wps-track-bg: #3d3147;
+    --wps-shadow: 0 10px 26px rgba(0, 0, 0, 0.35);
+    --wps-text: #f8eef3;
+    --wps-subtext: #bfa6b4;
+    --wps-berry: #f472b6;
+    --wps-berry-hover: #ec4899;
+    --wps-olive: #8ab85c;
+    --wps-olive-hover: #739e48;
+    --wps-purple: #c084fc;
+    --wps-purple-hover: #a855f7;
+    --wps-amber: #fbbf24;
+    --wps-danger: #f87171;
+    --wps-danger-bg: rgba(248, 113, 113, 0.16);
+}
+
+/* =========================================================
+   ШАПКА БЛОКУ ТА ФОРМА ШВИДКОГО ОНОВЛЕННЯ ВАГИ
+   ========================================================= */
+.wps-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.wps-title-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.wps-title {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.wps-saved-badge {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--wps-olive);
+    background: rgba(74, 107, 44, 0.14);
+    padding: 3px 10px;
+    border-radius: 9999px;
+}
+
+.wps-log-form {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.wps-input {
+    padding: 7px 12px;
+    border-radius: 9999px;
+    border: 1px solid var(--wps-border);
+    background: var(--wps-inner-bg);
+    color: var(--wps-text);
+    font-family: inherit;
+    font-size: 13px;
+    outline: none;
+    box-sizing: border-box;
+    transition: border-color 0.15s ease;
+}
+
+.wps-input:focus {
+    border-color: var(--wps-berry);
+}
+
+.weight-progress-section.light .wps-date-input {
+    color-scheme: light;
+}
+
+.weight-progress-section.dark .wps-date-input {
+    color-scheme: dark;
+}
+
+.wps-date-input {
+    font-size: 12.5px;
+}
+
+.wps-weight-input {
+    width: 108px;
+    font-weight: 700;
+}
+
+.wps-btn-primary {
+    padding: 8px 16px;
+    border-radius: 9999px;
+    border: none;
+    background: var(--wps-berry);
+    color: #ffffff;
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 12.5px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background-color 0.15s ease;
+}
+
+.wps-btn-primary:hover:not(:disabled) {
+    background: var(--wps-berry-hover);
+}
+
+.wps-btn-primary:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+}
+
+/* =========================================================
+   БЛОК ШВИДКОГО ВСТАНОВЛЕННЯ ЦІЛЬОВОЇ ВАГИ
+   ========================================================= */
+.wps-setup-box {
+    background: var(--wps-sub-bg);
+    border: 1.5px dashed var(--wps-border);
+    border-radius: 20px;
+    padding: 16px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.wps-setup-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.wps-setup-hint {
+    font-size: 13px;
+    color: var(--wps-text);
+    font-weight: 600;
+}
+
+.wps-link-btn {
+    background: transparent;
+    border: none;
+    color: var(--wps-subtext);
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    text-decoration: underline;
+    cursor: pointer;
+    padding: 0;
+}
+
+.wps-link-btn:hover {
+    color: var(--wps-berry);
+}
+
+.wps-setup-form {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.wps-current-pill {
+    padding: 7px 14px;
+    border-radius: 9999px;
+    background: var(--wps-inner-bg);
+    border: 1px solid var(--wps-border);
+    font-size: 13px;
+    color: var(--wps-subtext);
+}
+
+.wps-current-pill strong {
+    color: var(--wps-text);
+}
+
+.wps-inline-current {
+    width: 135px;
+    font-weight: 700;
+}
+
+.wps-inline-target {
+    width: 160px;
+    border: 1.5px solid var(--wps-berry);
+    font-weight: 700;
+}
+
+.wps-arrow {
+    color: var(--wps-subtext);
+    font-weight: 700;
+}
+
+.wps-preview-diff {
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.wps-preview-diff.neutral {
+    color: var(--wps-subtext);
+}
+
+.wps-preview-diff.loss {
+    color: var(--wps-olive);
+}
+
+.wps-preview-diff.gain {
+    color: var(--wps-purple);
+}
+
+/* =========================================================
+   ВНУТРІШНІ КАРТКИ ТА ШКАЛА ПРОГРЕСУ
+   ========================================================= */
+.wps-sub-card {
+    background: var(--wps-sub-bg);
+    border: 1px solid var(--wps-border);
+    border-radius: 20px;
+    padding: 16px 18px;
+    margin-bottom: 14px;
+}
+
+.wps-sub-card--flush {
+    margin-bottom: 0;
+}
+
+.wps-progress-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 10px;
+    font-size: 13px;
+}
+
+.wps-milestones {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    flex-wrap: wrap;
+}
+
+.wps-start-btn {
+    background: transparent;
+    border: none;
+    border-bottom: 1.5px dashed var(--wps-berry);
+    padding: 2px 6px;
+    border-radius: 6px;
+    color: var(--wps-text);
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 13px;
+}
+
+.wps-start-edit-form {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.wps-start-input {
+    width: 74px;
+    padding: 4px 8px;
+    border: 1.5px solid var(--wps-berry);
+    font-size: 12.5px;
+    font-weight: 700;
+}
+
+.wps-mini-btn {
+    padding: 4px 9px;
+    border-radius: 9999px;
+    font-size: 11.5px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.wps-mini-btn--ok {
+    border: none;
+    background: var(--wps-olive);
+    color: #ffffff;
+}
+
+.wps-mini-btn--cancel {
+    border: 1px solid var(--wps-border);
+    background: var(--wps-inner-bg);
+    color: var(--wps-subtext);
+}
+
+.wps-current-val {
+    color: var(--wps-berry);
+    font-size: 15px;
+}
+
+.wps-target-val {
+    color: var(--wps-olive);
+}
+
+.wps-progress-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.wps-percent-label {
+    color: var(--wps-berry);
+}
+
+.wps-percent-label.reached {
+    color: var(--wps-olive);
+}
+
+.wps-reset-btn {
+    padding: 5px 11px;
+    border-radius: 9999px;
+    border: 1px solid var(--wps-border);
+    background: var(--wps-inner-bg);
+    color: var(--wps-danger);
+    font-family: inherit;
+    font-size: 11.5px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: border-color 0.15s ease;
+}
+
+.wps-reset-btn:hover {
+    border-color: var(--wps-danger);
+}
+
+.wps-progress-track {
+    height: 11px;
+    background: var(--wps-track-bg);
+    border-radius: 9999px;
+    overflow: hidden;
+    margin-bottom: 14px;
+}
+
+.wps-progress-fill {
+    height: 100%;
+    border-radius: 9999px;
+    background: linear-gradient(90deg, var(--wps-berry), var(--wps-purple));
+    transition: width 0.35s ease;
+}
+
+.wps-progress-fill.reached {
+    background: var(--wps-olive);
+}
+
+/* =========================================================
+   ВИБІР БАЖАНОГО ТЕМПУ СХУДНЕННЯ / НАБОРУ ВАГИ
+   ========================================================= */
+.wps-pace-box {
+    background: var(--wps-inner-bg);
+    border: 1px solid var(--wps-border);
+    border-radius: 16px;
+    padding: 12px 14px;
+    margin-bottom: 14px;
+}
+
+.wps-pace-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 9px;
+}
+
+.wps-pace-question {
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--wps-text);
+}
+
+.wps-pace-kcal-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.wps-pace-kcal-hint {
+    font-size: 11.5px;
+    color: var(--wps-subtext);
+}
+
+.wps-apply-kcal-btn {
+    padding: 4px 11px;
+    border-radius: 9999px;
+    border: none;
+    background: var(--wps-purple);
+    color: #ffffff;
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+}
+
+.wps-apply-kcal-btn:hover:not(:disabled) {
+    background: var(--wps-purple-hover);
+}
+
+.wps-presets-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+}
+
+.wps-preset-btn {
+    padding: 5px 12px;
+    border-radius: 9999px;
+    border: 1px solid var(--wps-border);
+    background: var(--wps-sub-bg);
+    color: var(--wps-text);
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.wps-preset-btn.active {
+    border-color: var(--wps-berry);
+    background: rgba(200, 55, 104, 0.16);
+    font-weight: 700;
+}
+
+.wps-preset-desc {
+    font-size: 10.5px;
+    color: var(--wps-subtext);
+}
+
+.wps-custom-rate {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    margin-left: 4px;
+}
+
+.wps-rate-input {
+    width: 68px;
+    padding: 5px 9px;
+    font-size: 12px;
+    font-weight: 700;
+    text-align: center;
+}
+
+.wps-muted-xs {
+    font-size: 11.5px;
+    color: var(--wps-subtext);
+}
+
+/* =========================================================
+   КАРТКИ СТАТИСТИКИ ТА ПРОГНОЗУ
+   ========================================================= */
+.wps-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 10px;
+}
+
+.wps-stat-tile {
+    background: var(--wps-inner-bg);
+    border: 1px solid var(--wps-border);
+    border-radius: 16px;
+    padding: 11px 14px;
+}
+
+.wps-stat-label {
+    font-size: 11.5px;
+    color: var(--wps-subtext);
+}
+
+.wps-stat-value {
+    font-size: 16px;
+    font-weight: 700;
+    margin-top: 3px;
+}
+
+.wps-stat-sub {
+    font-size: 11px;
+    color: var(--wps-subtext);
+    margin-top: 2px;
+}
+
+.wps-berry-text {
+    color: var(--wps-berry);
+}
+
+.wps-olive-text {
+    color: var(--wps-olive);
+}
+
+.wps-purple-text {
+    color: var(--wps-purple);
+}
+
+/* =========================================================
+   ГРАФІК ЗВАЖУВАНЬ ТА СПИСОК ІСТОРІЇ
+   ========================================================= */
+.wps-chart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.wps-chart-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--wps-subtext);
+}
+
+.wps-history-toggle-btn {
+    padding: 5px 13px;
+    border-radius: 9999px;
+    border: 1px solid var(--wps-border);
+    background: var(--wps-inner-bg);
+    color: var(--wps-text);
+    font-family: inherit;
+    font-size: 11.5px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.wps-history-toggle-btn:hover {
+    border-color: var(--wps-berry);
+    color: var(--wps-berry);
+}
+
+.wps-chart-wrap {
+    height: 190px;
+}
+
+.wps-history-list {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--wps-border);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    max-height: 195px;
+    overflow-y: auto;
+}
+
+.wps-history-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--wps-inner-bg);
+    border: 1px solid var(--wps-border);
+    border-radius: 14px;
+    padding: 7px 12px;
+    font-size: 12.5px;
+}
+
+.wps-history-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.wps-history-date {
+    color: var(--wps-subtext);
+}
+
+.wps-start-tag {
+    font-size: 10.5px;
+    padding: 2px 8px;
+    border-radius: 9999px;
+    background: var(--wps-sub-bg);
+    border: 1px solid var(--wps-border);
+    color: var(--wps-text);
+    font-weight: 600;
+}
+
+.wps-diff-badge {
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.wps-diff-badge.positive {
+    color: var(--wps-olive);
+}
+
+.wps-diff-badge.neutral {
+    color: var(--wps-amber);
+}
+
+.wps-delete-log-btn {
+    background: transparent;
+    border: none;
+    color: var(--wps-danger);
+    cursor: pointer;
+    font-size: 14px;
+    padding: 3px 6px;
+    border-radius: 50%;
+    transition: background-color 0.15s ease;
+}
+
+.wps-delete-log-btn:hover {
+    background: var(--wps-danger-bg);
+}
+
+/* =========================================================
+   АДАПТИВНІСТЬ
+   ========================================================= */
+@media (max-width: 600px) {
+    .weight-progress-section {
+        border-radius: 20px;
+        padding: 18px 16px;
+    }
+}

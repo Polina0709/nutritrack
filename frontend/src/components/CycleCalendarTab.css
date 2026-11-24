@@ -1,0 +1,870 @@
+/* frontend/src/components/CycleCalendarTab.css */
+
+.cycle-calendar-tab {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 22px;
+    align-items: flex-start;
+    color: var(--cc-text);
+}
+
+.cycle-calendar-tab.light {
+    --cc-card-bg: #fff0f5;
+    --cc-sub-bg: #ffe5ef;
+    --cc-input-bg: #ffffff;
+    --cc-border: #f4c6d7;
+    --cc-shadow: 0 8px 24px rgba(200, 55, 104, 0.14);
+    --cc-text: #2b2328;
+    --cc-subtext: #7c5667;
+    --cc-berry: #c83768;
+    --cc-berry-hover: #b12c59;
+    --cc-crimson: #e11d48;
+    --cc-crimson-hover: #be123c;
+    --cc-olive: #4a6b2c;
+    --cc-olive-hover: #3b5622;
+    --cc-amber: #d97706;
+    --cc-plum: #8b5cf6;
+    --cc-selected-ring: #4a6b2c;
+
+    --cc-actual-bg: #ffd5e0;
+    --cc-actual-border: #e11d48;
+    --cc-predicted-bg: #ffeaf2;
+    --cc-predicted-border: #c83768;
+    --cc-ovulation-bg: #fef3c7;
+    --cc-ovulation-border: #f59e0b;
+    --cc-fertile-bg: #e7f3dc;
+    --cc-fertile-border: #4a6b2c;
+
+    --cc-warn-bg: #fff8e7;
+    --cc-warn-border: #f59e0b;
+    --cc-warn-title: #b45309;
+    --cc-due-bg: #f5f3ff;
+}
+
+.cycle-calendar-tab.dark {
+    --cc-card-bg: #1f1a24;
+    --cc-sub-bg: #292230;
+    --cc-input-bg: #141118;
+    --cc-border: #3d3147;
+    --cc-shadow: 0 10px 26px rgba(0, 0, 0, 0.35);
+    --cc-text: #f8eef3;
+    --cc-subtext: #bfa6b4;
+    --cc-berry: #f472b6;
+    --cc-berry-hover: #ec4899;
+    --cc-crimson: #fb7185;
+    --cc-crimson-hover: #f43f5e;
+    --cc-olive: #8ab85c;
+    --cc-olive-hover: #739e48;
+    --cc-amber: #fbbf24;
+    --cc-plum: #a78bfa;
+    --cc-selected-ring: #a78bfa;
+
+    --cc-actual-bg: rgba(225, 29, 72, 0.36);
+    --cc-actual-border: #fb7185;
+    --cc-predicted-bg: rgba(244, 114, 182, 0.16);
+    --cc-predicted-border: #f472b6;
+    --cc-ovulation-bg: rgba(217, 119, 6, 0.28);
+    --cc-ovulation-border: #fbbf24;
+    --cc-fertile-bg: rgba(74, 107, 44, 0.28);
+    --cc-fertile-border: #8ab85c;
+
+    --cc-warn-bg: rgba(245, 158, 11, 0.14);
+    --cc-warn-border: #b45309;
+    --cc-warn-title: #fbbf24;
+    --cc-due-bg: rgba(139, 92, 246, 0.16);
+}
+
+/* =========================================================
+   КОЛОНКИ ТА КАРТКИ
+   ========================================================= */
+.cc-column-left {
+    flex: 1 1 390px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    min-width: 0;
+}
+
+.cc-column-right {
+    flex: 1 1 430px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    min-width: 0;
+}
+
+.cc-card {
+    background: var(--cc-card-bg);
+    border-radius: 28px;
+    padding: 22px 24px;
+    box-shadow: var(--cc-shadow);
+    box-sizing: border-box;
+}
+
+.cc-card--compact {
+    padding: 18px 22px;
+}
+
+.cc-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.cc-main-heading {
+    margin: 0;
+    font-size: 16.5px;
+    font-weight: 700;
+}
+
+.cc-sub-heading {
+    margin: 0;
+    font-size: 14.5px;
+    font-weight: 700;
+}
+
+.cc-sub-heading--mb {
+    margin-bottom: 12px;
+}
+
+.cc-sync-badge {
+    font-size: 11px;
+    color: var(--cc-subtext);
+}
+
+.cc-saved-msg {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--cc-olive);
+}
+
+/* =========================================================
+   ШАПКА КАЛЕНДАРЯ ТА РЕЖИМ РЕДАГУВАННЯ
+   ========================================================= */
+.cc-month-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+    gap: 8px;
+}
+
+.cc-nav-btn {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: 1px solid var(--cc-border);
+    background: var(--cc-sub-bg);
+    color: var(--cc-text);
+    cursor: pointer;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.cc-nav-btn:hover {
+    border-color: var(--cc-berry);
+    color: var(--cc-berry);
+}
+
+.cc-month-title-box {
+    text-align: center;
+}
+
+.cc-month-title {
+    font-size: 17px;
+    font-weight: 700;
+}
+
+.cc-selected-subtitle {
+    font-size: 12px;
+    color: var(--cc-subtext);
+    margin-top: 2px;
+}
+
+.cc-edit-mode-wrap {
+    margin-bottom: 14px;
+}
+
+.cc-edit-mode-btn {
+    width: 100%;
+    padding: 9px 14px;
+    border-radius: 18px;
+    border: 1.5px solid var(--cc-border);
+    background: var(--cc-sub-bg);
+    color: var(--cc-text);
+    font-size: 12.5px;
+    font-weight: 700;
+    cursor: pointer;
+    line-height: 1.35;
+    transition: all 0.15s ease;
+}
+
+.cc-edit-mode-btn:hover {
+    border-color: var(--cc-crimson);
+}
+
+.cc-edit-mode-btn.active {
+    border-color: var(--cc-crimson);
+    background: var(--cc-actual-bg);
+    color: var(--cc-crimson);
+}
+
+/* =========================================================
+   СІТКА ДНІВ МІСЯЦЯ
+   ========================================================= */
+.cc-weekdays-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+    text-align: center;
+    margin-bottom: 6px;
+}
+
+.cc-weekday-label {
+    font-size: 11.5px;
+    font-weight: 700;
+    color: var(--cc-subtext);
+}
+
+.cc-days-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 6px;
+}
+
+.cc-day-cell {
+    min-height: 54px;
+    padding: 5px 4px;
+    border-radius: 14px;
+    background: var(--cc-sub-bg);
+    border: 1px solid var(--cc-border);
+    color: var(--cc-text);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.cc-day-cell:hover {
+    transform: translateY(-1px);
+}
+
+.cc-day-cell--actual {
+    background: var(--cc-actual-bg);
+    border: 1.5px solid var(--cc-actual-border);
+}
+
+.cc-day-cell--predicted {
+    background: var(--cc-predicted-bg);
+    border: 1.5px dashed var(--cc-predicted-border);
+}
+
+.cc-day-cell--ovulation {
+    background: var(--cc-ovulation-bg);
+    border: 1.5px solid var(--cc-ovulation-border);
+}
+
+.cc-day-cell--fertile {
+    background: var(--cc-fertile-bg);
+    border: 1px solid var(--cc-fertile-border);
+}
+
+.cc-day-cell--selected {
+    box-shadow: 0 0 0 2.5px var(--cc-selected-ring);
+}
+
+.cc-day-number {
+    font-size: 12.5px;
+    font-weight: 500;
+}
+
+.cc-day-number--bold {
+    font-weight: 700;
+}
+
+.cc-day-number--today {
+    text-decoration: underline;
+}
+
+.cc-day-icons {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    font-size: 11px;
+    min-height: 15px;
+}
+
+.cc-day-edit-marker {
+    font-size: 10.5px;
+    font-weight: 700;
+    color: var(--cc-subtext);
+}
+
+.cc-day-edit-marker--active {
+    color: var(--cc-crimson);
+}
+
+.cc-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 14px;
+    font-size: 11.5px;
+    color: var(--cc-subtext);
+}
+
+/* =========================================================
+   КНОПКИ ШВИДКИХ ДІЙ ПІД КАЛЕНДАРЕМ
+   ========================================================= */
+.cc-quick-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+}
+
+.cc-action-btn {
+    padding: 10px 14px;
+    border-radius: 9999px;
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 12.5px;
+    transition: all 0.15s ease;
+}
+
+.cc-action-btn--summary {
+    flex: 1 1 100%;
+    border: 1.5px solid var(--cc-berry);
+    background: var(--cc-sub-bg);
+    color: var(--cc-berry);
+}
+
+.cc-action-btn--summary:hover {
+    background: var(--cc-berry);
+    color: #ffffff;
+}
+
+.cc-action-btn--toggle-day {
+    flex: 1 1 180px;
+    border: none;
+    background: var(--cc-crimson);
+    color: #ffffff;
+}
+
+.cc-action-btn--toggle-day:hover:not(:disabled) {
+    background: var(--cc-crimson-hover);
+}
+
+.cc-action-btn--toggle-day.is-marked {
+    border: 1.5px solid var(--cc-crimson);
+    background: var(--cc-card-bg);
+    color: var(--cc-crimson);
+}
+
+.cc-action-btn--interval {
+    flex: 1 1 160px;
+    border: 1px solid var(--cc-border);
+    background: var(--cc-sub-bg);
+    color: var(--cc-text);
+}
+
+.cc-action-btn--interval:hover {
+    border-color: var(--cc-berry);
+}
+
+/* =========================================================
+   ФОРМИ ТА ПОЛЯ ВВЕДЕННЯ
+   ========================================================= */
+.cc-sub-form {
+    margin-top: 14px;
+    background: var(--cc-sub-bg);
+    border: 1px solid var(--cc-border);
+    border-radius: 20px;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.cc-sub-form--mb {
+    margin-top: 0;
+    margin-bottom: 16px;
+}
+
+.cc-grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.cc-field-label {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 4px;
+    color: var(--cc-text);
+}
+
+.cc-field-label--xs {
+    font-size: 11px;
+    margin-bottom: 2px;
+}
+
+.cc-group-label {
+    display: block;
+    font-size: 12.5px;
+    font-weight: 700;
+    margin-bottom: 7px;
+}
+
+.cc-input {
+    width: 100%;
+    padding: 8px 12px;
+    border-radius: 14px;
+    border: 1px solid var(--cc-border);
+    background: var(--cc-input-bg);
+    color: var(--cc-text);
+    box-sizing: border-box;
+    font-family: inherit;
+    font-size: 13px;
+    outline: none;
+    transition: border-color 0.15s ease;
+}
+
+.cc-input:focus {
+    border-color: var(--cc-berry);
+}
+
+.cc-input--sm {
+    padding: 6px 10px;
+    border-radius: 12px;
+}
+
+.cc-textarea {
+    resize: vertical;
+}
+
+.cycle-calendar-tab.light .cc-input[type='date'],
+.cycle-calendar-tab.light .cc-input[type='time'] {
+    color-scheme: light;
+}
+
+.cycle-calendar-tab.dark .cc-input[type='date'],
+.cycle-calendar-tab.dark .cc-input[type='time'] {
+    color-scheme: dark;
+}
+
+.cc-primary-btn {
+    width: 100%;
+    padding: 10px 16px;
+    border-radius: 9999px;
+    border: none;
+    background: var(--cc-berry);
+    color: #ffffff;
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 13.5px;
+    transition: background-color 0.15s ease;
+}
+
+.cc-primary-btn:hover:not(:disabled) {
+    background: var(--cc-berry-hover);
+}
+
+.cc-primary-btn--crimson {
+    background: var(--cc-crimson);
+}
+
+.cc-primary-btn--crimson:hover:not(:disabled) {
+    background: var(--cc-crimson-hover);
+}
+
+.cc-primary-btn--olive {
+    background: var(--cc-olive);
+}
+
+.cc-primary-btn--olive:hover:not(:disabled) {
+    background: var(--cc-olive-hover);
+}
+
+/* =========================================================
+   АВТОСТАТИСТИКА ТА ІСТОРІЯ ЦИКЛІВ
+   ========================================================= */
+.cc-stat-tile {
+    background: var(--cc-sub-bg);
+    border: 1px solid var(--cc-border);
+    border-radius: 18px;
+    padding: 12px 14px;
+}
+
+.cc-stat-label {
+    font-size: 11.5px;
+    color: var(--cc-subtext);
+    margin-bottom: 3px;
+}
+
+.cc-stat-value {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.cc-accent-berry {
+    color: var(--cc-berry);
+}
+
+.cc-accent-crimson {
+    color: var(--cc-crimson);
+}
+
+.cc-stat-hint {
+    font-size: 11px;
+    color: var(--cc-subtext);
+    margin-top: 2px;
+}
+
+.cc-deviations-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.cc-deviation-alert {
+    background: var(--cc-warn-bg);
+    border: 1px solid var(--cc-warn-border);
+    border-radius: 16px;
+    padding: 10px 14px;
+    font-size: 12px;
+    line-height: 1.45;
+}
+
+.cc-deviation-title {
+    font-weight: 700;
+    color: var(--cc-warn-title);
+    margin-bottom: 2px;
+}
+
+.cc-history-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.cc-history-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--cc-sub-bg);
+    border: 1px solid var(--cc-border);
+    border-radius: 16px;
+    padding: 9px 14px;
+    font-size: 13px;
+}
+
+.cc-history-edit-form {
+    background: var(--cc-sub-bg);
+    border: 1.5px solid var(--cc-berry);
+    border-radius: 18px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.cc-edit-actions-row {
+    display: flex;
+    gap: 8px;
+}
+
+.cc-save-small-btn {
+    flex: 1;
+    padding: 7px 12px;
+    border-radius: 9999px;
+    border: none;
+    background: var(--cc-olive);
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.cc-cancel-small-btn {
+    flex: 1;
+    padding: 7px 12px;
+    border-radius: 9999px;
+    border: 1px solid var(--cc-border);
+    background: var(--cc-card-bg);
+    color: var(--cc-text);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.cc-row-icon-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.cc-icon-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    padding: 4px 6px;
+    border-radius: 50%;
+    transition: background-color 0.15s ease;
+}
+
+.cc-icon-btn--edit:hover {
+    background: rgba(74, 107, 44, 0.14);
+}
+
+.cc-icon-btn--delete:hover {
+    background: rgba(225, 29, 72, 0.12);
+}
+
+/* =========================================================
+   ДЕТАЛЬНИЙ ЧЕК-ІН (НАСТРІЙ, ЕНЕРГІЯ, СИМПТОМИ, АКТИВНІСТЬ)
+   ========================================================= */
+.cc-form-group {
+    margin-bottom: 16px;
+}
+
+.cc-form-group--sm {
+    margin-bottom: 14px;
+}
+
+.cc-mood-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(112px, 1fr));
+    gap: 7px;
+}
+
+.cc-mood-btn {
+    padding: 8px 10px;
+    border-radius: 16px;
+    border: 1px solid var(--cc-border);
+    background: var(--cc-sub-bg);
+    color: var(--cc-text);
+    cursor: pointer;
+    font-size: 12.5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    transition: all 0.15s ease;
+}
+
+.cc-mood-btn.active {
+    border-color: var(--cc-berry);
+    background: rgba(200, 55, 104, 0.16);
+    font-weight: 700;
+}
+
+.cc-energy-row {
+    display: flex;
+    gap: 8px;
+}
+
+.cc-energy-btn {
+    flex: 1;
+    padding: 7px;
+    border-radius: 9999px;
+    border: 1px solid var(--cc-border);
+    background: var(--cc-sub-bg);
+    color: var(--cc-text);
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.cc-energy-btn.active {
+    border-color: var(--cc-amber);
+    background: rgba(245, 158, 11, 0.22);
+}
+
+.cc-symptoms-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+}
+
+.cc-symptom-chip {
+    padding: 6px 12px;
+    border-radius: 9999px;
+    border: 1px solid var(--cc-border);
+    background: var(--cc-sub-bg);
+    color: var(--cc-text);
+    font-size: 12.5px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.cc-symptom-chip.active {
+    border-color: var(--cc-olive);
+    background: rgba(74, 107, 44, 0.18);
+    font-weight: 700;
+}
+
+.cc-activity-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 10px;
+    margin-bottom: 14px;
+}
+
+/* =========================================================
+   ТРЕКЕР ПРЕПАРАТІВ
+   ========================================================= */
+.cc-med-add-toggle {
+    padding: 7px 14px;
+    border-radius: 9999px;
+    border: none;
+    background: var(--cc-olive);
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+}
+
+.cc-med-add-toggle:hover {
+    background: var(--cc-olive-hover);
+}
+
+.cc-med-add-toggle.is-open {
+    background: var(--cc-subtext);
+}
+
+.cc-empty-text {
+    margin: 0;
+    font-size: 13px;
+    color: var(--cc-subtext);
+    font-style: italic;
+}
+
+.cc-meds-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.cc-med-item {
+    background: var(--cc-sub-bg);
+    border: 1px solid var(--cc-border);
+    border-radius: 18px;
+    padding: 12px 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.cc-med-item--due {
+    background: var(--cc-due-bg);
+    border-color: var(--cc-plum);
+}
+
+.cc-med-item--taken {
+    border-color: var(--cc-olive);
+}
+
+.cc-med-title-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.cc-med-name {
+    font-size: 14px;
+}
+
+.cc-med-dosage {
+    font-size: 11.5px;
+    color: var(--cc-subtext);
+}
+
+.cc-med-time {
+    font-size: 11.5px;
+    color: var(--cc-subtext);
+}
+
+.cc-med-time.is-due {
+    color: var(--cc-plum);
+    font-weight: 700;
+}
+
+.cc-coc-status {
+    margin-top: 4px;
+    font-size: 11.5px;
+    font-weight: 700;
+}
+
+.cc-coc-status.is-active {
+    color: var(--cc-berry);
+}
+
+.cc-coc-status.is-break {
+    color: var(--cc-amber);
+}
+
+.cc-med-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.cc-med-take-btn {
+    padding: 7px 14px;
+    border-radius: 9999px;
+    border: 1px solid var(--cc-border);
+    background: var(--cc-card-bg);
+    color: var(--cc-text);
+    font-weight: 700;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.cc-med-take-btn.is-due {
+    border: none;
+    background: var(--cc-plum);
+    color: #ffffff;
+}
+
+.cc-med-take-btn.is-taken {
+    border: none;
+    background: var(--cc-olive);
+    color: #ffffff;
+}
+
+/* =========================================================
+   АДАПТИВНІСТЬ
+   ========================================================= */
+@media (max-width: 540px) {
+    .cc-card {
+        border-radius: 22px;
+        padding: 16px;
+    }
+
+    .cc-activity-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .cc-day-cell {
+        min-height: 46px;
+        border-radius: 10px;
+    }
+}

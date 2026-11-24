@@ -1,0 +1,512 @@
+/* frontend/src/components/FoodWaterTab.css */
+
+.food-water-tab {
+    max-width: 920px;
+    margin: 0 auto;
+    color: var(--fw-text);
+}
+
+.food-water-tab.light {
+    --fw-card-bg: #fff0f5;
+    --fw-sub-bg: #ffe5ef;
+    --fw-pill-bg: #ffd9e7;
+    --fw-border: #f4c6d7;
+    --fw-dashed-border: #ecc1d2;
+    --fw-shadow: 0 8px 24px rgba(200, 55, 104, 0.14);
+    --fw-text: #2b2328;
+    --fw-subtext: #7c5667;
+    --fw-berry: #c83768;
+    --fw-berry-hover: #b12c59;
+    --fw-olive: #4a6b2c;
+    --fw-amber: #d97706;
+    --fw-plum: #8b5cf6;
+    --fw-danger: #e11d48;
+
+    --fw-water-bg: #eaf6ff;
+    --fw-water-border: #b8e1fa;
+    --fw-water-title: #0369a1;
+    --fw-water-sub: #0284c7;
+    --fw-water-btn: #0284c7;
+    --fw-water-btn-hover: #0369a1;
+    --fw-glass-empty: rgba(255, 255, 255, 0.72);
+    --fw-glass-stroke: #38bdf8;
+    --fw-glass-fill: #0ea5e9;
+    --fw-glass-extra-stroke: #0d9488;
+    --fw-glass-extra-fill: #14b8a6;
+}
+
+.food-water-tab.dark {
+    --fw-card-bg: #1f1a24;
+    --fw-sub-bg: #292230;
+    --fw-pill-bg: #141118;
+    --fw-border: #3d3147;
+    --fw-dashed-border: #3d3147;
+    --fw-shadow: 0 10px 26px rgba(0, 0, 0, 0.35);
+    --fw-text: #f8eef3;
+    --fw-subtext: #bfa6b4;
+    --fw-berry: #f472b6;
+    --fw-berry-hover: #ec4899;
+    --fw-olive: #8ab85c;
+    --fw-amber: #fbbf24;
+    --fw-plum: #a78bfa;
+    --fw-danger: #fb7185;
+
+    --fw-water-bg: #162231;
+    --fw-water-border: #26405e;
+    --fw-water-title: #7dd3fc;
+    --fw-water-sub: #bae6fd;
+    --fw-water-btn: #0284c7;
+    --fw-water-btn-hover: #0369a1;
+    --fw-glass-empty: rgba(255, 255, 255, 0.1);
+    --fw-glass-stroke: #38bdf8;
+    --fw-glass-fill: #0284c7;
+    --fw-glass-extra-stroke: #2dd4bf;
+    --fw-glass-extra-fill: #0d9488;
+}
+
+/* =========================================================
+   ПЕРЕМИКАЧ ДАТИ
+   ========================================================= */
+.fw-date-bar {
+    background: var(--fw-card-bg);
+    border-radius: 28px;
+    padding: 12px 20px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    box-shadow: var(--fw-shadow);
+}
+
+.fw-date-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.fw-date-nav-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1px solid var(--fw-border);
+    background: var(--fw-sub-bg);
+    color: var(--fw-text);
+    cursor: pointer;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.fw-date-nav-btn:hover:not(:disabled) {
+    border-color: var(--fw-berry);
+    color: var(--fw-berry);
+}
+
+.fw-date-nav-btn:disabled {
+    color: var(--fw-subtext);
+    cursor: not-allowed;
+    opacity: 0.45;
+}
+
+.fw-date-input {
+    padding: 7px 14px;
+    border-radius: 9999px;
+    border: 1px solid var(--fw-border);
+    background: var(--fw-sub-bg);
+    color: var(--fw-text);
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 13.5px;
+    outline: none;
+}
+
+.food-water-tab.light .fw-date-input {
+    color-scheme: light;
+}
+
+.food-water-tab.dark .fw-date-input {
+    color-scheme: dark;
+}
+
+.fw-date-summary-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.fw-date-summary {
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--fw-berry);
+}
+
+.fw-today-btn {
+    padding: 6px 14px;
+    border-radius: 9999px;
+    border: none;
+    background: var(--fw-berry);
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+}
+
+.fw-today-btn:hover {
+    background: var(--fw-berry-hover);
+}
+
+/* =========================================================
+   ЗВЕДЕННЯ КБЖВ ЗА ДЕНЬ
+   ========================================================= */
+.fw-macros-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(165px, 1fr));
+    gap: 12px;
+    margin-bottom: 22px;
+    text-align: center;
+}
+
+.fw-macro-card {
+    background: var(--fw-card-bg);
+    border-radius: 22px;
+    padding: 14px 12px;
+    box-shadow: var(--fw-shadow);
+    box-sizing: border-box;
+}
+
+.fw-macro-card--centered {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.fw-macro-value {
+    font-weight: 700;
+    font-size: 15.5px;
+}
+
+.fw-macro-target {
+    font-size: 11.5px;
+    color: var(--fw-subtext);
+    margin-top: 3px;
+}
+
+.fw-accent-berry {
+    color: var(--fw-berry);
+}
+
+.fw-accent-olive {
+    color: var(--fw-olive);
+}
+
+.fw-accent-amber {
+    color: var(--fw-amber);
+}
+
+.fw-accent-plum {
+    color: var(--fw-plum);
+}
+
+.fw-diff-ok {
+    color: var(--fw-olive);
+    font-weight: 600;
+}
+
+.fw-diff-over {
+    color: var(--fw-danger);
+    font-weight: 600;
+}
+
+.fw-progress-track {
+    height: 6px;
+    background: var(--fw-pill-bg);
+    border-radius: 9999px;
+    overflow: hidden;
+    margin: 8px 0 5px 0;
+}
+
+.fw-progress-fill {
+    height: 100%;
+    background: var(--fw-berry);
+    border-radius: 9999px;
+    transition: width 0.25s ease;
+}
+
+.fw-progress-fill--over {
+    background: var(--fw-danger);
+}
+
+.fw-dynamic-note {
+    font-size: 10.5px;
+    color: var(--fw-olive);
+    font-weight: 700;
+}
+
+/* =========================================================
+   ТРЕКЕР ВОДИ
+   ========================================================= */
+.fw-water-card {
+    background: var(--fw-water-bg);
+    border: 1.5px solid var(--fw-water-border);
+    border-radius: 28px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+    color: var(--fw-water-title);
+    box-shadow: var(--fw-shadow);
+}
+
+.fw-water-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.fw-water-title {
+    margin: 0;
+    font-size: 16.5px;
+    font-weight: 700;
+}
+
+.fw-water-counter {
+    font-weight: 700;
+    font-size: 14.5px;
+}
+
+.fw-water-hint {
+    margin: 0 0 14px 0;
+    font-size: 12.5px;
+    color: var(--fw-water-sub);
+}
+
+.fw-glasses-grid {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    margin-bottom: 16px;
+    padding-top: 6px;
+}
+
+.fw-glass {
+    width: 34px;
+    height: 44px;
+    border: 3px solid var(--fw-glass-stroke);
+    border-radius: 4px 4px 12px 12px;
+    background: var(--fw-glass-empty);
+    cursor: pointer;
+    position: relative;
+    transition: transform 0.15s ease, background-color 0.2s ease;
+}
+
+.fw-glass:hover {
+    transform: translateY(-2px);
+}
+
+.fw-glass--remainder {
+    height: 36px;
+}
+
+.fw-glass--full {
+    background: var(--fw-glass-fill);
+}
+
+.fw-glass--extra {
+    border-color: var(--fw-glass-extra-stroke);
+}
+
+.fw-glass--extra.fw-glass--full {
+    background: var(--fw-glass-extra-fill);
+}
+
+.fw-glass-badge {
+    position: absolute;
+    top: -7px;
+    right: -7px;
+    width: 17px;
+    height: 17px;
+    border-radius: 50%;
+    background: #ffffff;
+    border: 1.5px solid var(--fw-danger);
+    color: var(--fw-danger);
+    font-size: 10px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+
+.fw-water-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.fw-water-add-btn {
+    flex: 1;
+    min-width: 180px;
+    padding: 10px 16px;
+    background: var(--fw-water-btn);
+    color: #ffffff;
+    border: none;
+    border-radius: 9999px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 13px;
+    transition: background-color 0.15s ease, transform 0.15s ease;
+}
+
+.fw-water-add-btn:hover {
+    background: var(--fw-water-btn-hover);
+}
+
+.fw-water-undo-btn {
+    flex: 1;
+    min-width: 180px;
+    padding: 10px 16px;
+    background: var(--fw-card-bg);
+    color: var(--fw-danger);
+    border: 1.5px solid var(--fw-danger);
+    border-radius: 9999px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 13px;
+    transition: opacity 0.15s ease, background-color 0.15s ease;
+}
+
+.fw-water-undo-btn:disabled {
+    background: rgba(255, 255, 255, 0.25);
+    color: var(--fw-subtext);
+    border-color: var(--fw-border);
+    cursor: not-allowed;
+    opacity: 0.65;
+}
+
+/* =========================================================
+   ЩОДЕННИК ХАРЧУВАННЯ ТА ПРИЙОМИ ЇЖІ
+   ========================================================= */
+.fw-section-heading {
+    margin: 0 0 14px 4px;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--fw-text);
+}
+
+.fw-meal-card {
+    margin-bottom: 16px;
+    background: var(--fw-card-bg);
+    border-radius: 28px;
+    padding: 20px 24px;
+    box-shadow: var(--fw-shadow);
+    box-sizing: border-box;
+}
+
+.fw-meal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.fw-meal-title {
+    margin: 0;
+    font-size: 15.5px;
+    font-weight: 700;
+}
+
+.fw-meal-kcal {
+    font-weight: 700;
+    font-size: 13.5px;
+    color: var(--fw-olive);
+    background: rgba(74, 107, 44, 0.12);
+    padding: 4px 12px;
+    border-radius: 9999px;
+}
+
+.fw-food-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 14px 0;
+}
+
+.fw-food-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 4px;
+    border-bottom: 1px dashed var(--fw-dashed-border);
+    font-size: 14px;
+}
+
+.fw-food-item:last-child {
+    border-bottom: none;
+}
+
+.fw-food-kcal {
+    color: var(--fw-subtext);
+    font-size: 12.5px;
+}
+
+.fw-food-delete-btn {
+    background: transparent;
+    border: none;
+    color: var(--fw-danger);
+    cursor: pointer;
+    font-size: 15px;
+    padding: 4px 6px;
+    border-radius: 50%;
+    transition: background-color 0.15s ease;
+}
+
+.fw-food-delete-btn:hover {
+    background: rgba(225, 29, 72, 0.1);
+}
+
+.fw-meal-empty {
+    font-size: 13px;
+    color: var(--fw-subtext);
+    font-style: italic;
+    margin: 0 0 14px 0;
+}
+
+.fw-add-food-btn {
+    width: 100%;
+    padding: 10px 16px;
+    background: var(--fw-berry);
+    color: #ffffff;
+    border: none;
+    border-radius: 9999px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 13.5px;
+    transition: background-color 0.15s ease, transform 0.15s ease;
+}
+
+.fw-add-food-btn:hover {
+    background: var(--fw-berry-hover);
+}
+
+/* =========================================================
+   АДАПТИВНІСТЬ
+   ========================================================= */
+@media (max-width: 540px) {
+    .fw-date-bar,
+    .fw-water-card,
+    .fw-meal-card {
+        border-radius: 22px;
+        padding: 16px;
+    }
+
+    .fw-macros-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
