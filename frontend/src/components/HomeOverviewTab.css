@@ -47,9 +47,17 @@
 /* =========================================================
    ЛІВИЙ САЙДБАР
    ========================================================= */
-.home-sidebar-card {
+.home-sidebar-column {
     flex: 1 1 265px;
     max-width: 315px;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+}
+
+.home-sidebar-card {
+    width: 100%;
     background: var(--ho-card-bg);
     border-radius: 28px;
     padding: 22px 20px;
@@ -595,7 +603,7 @@
    АДАПТИВНІСТЬ
    ========================================================= */
 @media (max-width: 860px) {
-    .home-sidebar-card {
+    .home-sidebar-column {
         max-width: none;
         width: 100%;
     }
