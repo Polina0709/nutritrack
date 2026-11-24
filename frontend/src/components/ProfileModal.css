@@ -121,20 +121,26 @@
    ========================================================= */
 .pm-grid-2 {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 12px;
 }
 
 .pm-grid-3 {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 10px;
 }
 
 .pm-grid-cycle {
     display: grid;
-    grid-template-columns: 1fr 1fr 1.3fr;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.3fr);
     gap: 8px;
+}
+
+.pm-grid-2 > div,
+.pm-grid-3 > div,
+.pm-grid-cycle > div {
+    min-width: 0;
 }
 
 .pm-form-group {
@@ -163,7 +169,11 @@
 }
 
 .pm-input {
+    display: block;
     width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    min-height: 38px;
     padding: 8px 12px;
     border-radius: 14px;
     border: 1px solid var(--pm-border);
@@ -178,6 +188,17 @@
 
 .pm-input:focus {
     border-color: var(--pm-berry);
+}
+
+.pm-input[type='date'] {
+    -webkit-appearance: none;
+    appearance: none;
+    text-align: left;
+    line-height: 1.4;
+}
+
+.pm-input[type='date']::-webkit-date-and-time-value {
+    text-align: left;
 }
 
 .profile-modal-overlay.light .pm-input[type='date'] {
@@ -195,6 +216,8 @@
     border-radius: 20px;
     padding: 14px 16px;
     margin-bottom: 16px;
+    box-sizing: border-box;
+    max-width: 100%;
 }
 
 .pm-sub-box--calc {
@@ -339,6 +362,11 @@
     .pm-grid-2,
     .pm-grid-3,
     .pm-grid-cycle {
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .pm-input {
+        font-size: 16px;
+        min-height: 42px;
     }
 }

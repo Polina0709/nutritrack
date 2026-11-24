@@ -1,0 +1,377 @@
+/* frontend/src/components/ProfileCompletionCard.css */
+
+/* =========================================================
+   КАРТКА КРУГОВОГО ПРОГРЕСУ ТА ЧЕК-ЛИСТА
+   ========================================================= */
+.pcc-card {
+    margin-top: 16px;
+    padding: 18px 20px;
+    border-radius: 24px;
+    border: 1.5px solid var(--border-color, #f4c6d7);
+    background-color: var(--surface-bg, #fff0f5);
+    box-shadow: var(--card-shadow, 0 8px 24px rgba(200, 55, 104, 0.14));
+    transition: opacity 0.45s ease, transform 0.45s ease;
+    box-sizing: border-box;
+}
+
+.pcc-card.light {
+    --pcc-track: #f4c6d7;
+    --pcc-fill: #c83768;
+    --pcc-done: #4a6b2c;
+    --pcc-item-bg: #ffe6ef;
+    --pcc-item-hover: #ffffff;
+    --pcc-strike: #4a6b2c;
+}
+
+.pcc-card.dark {
+    --pcc-track: #3d3147;
+    --pcc-fill: #e05283;
+    --pcc-done: #8ab85c;
+    --pcc-item-bg: #292230;
+    --pcc-item-hover: #32293b;
+    --pcc-strike: #8ab85c;
+}
+
+.pcc-card--finishing {
+    opacity: 0.92;
+}
+
+.pcc-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.pcc-title {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.pcc-counter {
+    padding: 3px 10px;
+    border-radius: 9999px;
+    font-size: 12px;
+    font-weight: 700;
+    background-color: var(--pcc-item-bg);
+    color: var(--accent-primary);
+    border: 1px solid var(--border-color);
+}
+
+/* =========================================================
+   КРУГОВИЙ ІНДИКАТОР (SVG PROGRESS RING)
+   ========================================================= */
+.pcc-ring-wrapper {
+    position: relative;
+    width: 104px;
+    height: 104px;
+    margin: 6px auto 16px auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pcc-ring-svg {
+    transform: rotate(-90deg);
+    overflow: visible;
+}
+
+.pcc-ring-track {
+    fill: none;
+    stroke: var(--pcc-track);
+}
+
+.pcc-ring-progress {
+    fill: none;
+    stroke: var(--pcc-fill);
+    stroke-linecap: round;
+    transition: stroke-dashoffset 0.65s cubic-bezier(0.22, 1, 0.36, 1), stroke 0.35s ease;
+}
+
+.pcc-ring-progress.complete {
+    stroke: var(--pcc-done);
+}
+
+.pcc-ring-center {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+}
+
+.pcc-ring-percent {
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.1;
+    color: var(--text-primary);
+}
+
+.pcc-ring-sub {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-top: 2px;
+}
+
+/* =========================================================
+   СПИСОК ПУНКТІВ + АНІМАЦІЯ ЗАКРЕСЛЕННЯ ТА ЗНИКНЕННЯ
+   ========================================================= */
+.pcc-checklist {
+    list-style: none;
+    margin: 0 0 14px 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.pcc-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 13px;
+    border-radius: 14px;
+    background-color: var(--pcc-item-bg);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    max-height: 60px;
+    overflow: hidden;
+    transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+}
+
+.pcc-item:hover:not(.pcc-item--completing) {
+    background-color: var(--pcc-item-hover);
+    border-color: var(--accent-primary);
+    transform: translateX(2px);
+}
+
+.pcc-item-check {
+    width: 19px;
+    height: 19px;
+    border-radius: 50%;
+    border: 1.8px solid var(--accent-primary);
+    background-color: transparent;
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: background-color 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+}
+
+.pcc-item-text {
+    position: relative;
+    display: inline-block;
+    line-height: 1.35;
+    transition: color 0.3s ease;
+}
+
+/* Лінія анімованого закреслення */
+.pcc-item-text::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 52%;
+    width: 100%;
+    height: 2px;
+    border-radius: 2px;
+    background-color: var(--pcc-strike);
+    transform: scaleX(0);
+    transform-origin: left center;
+}
+
+/* Стан щойно заповненого пункту: закреслення + плавне зникнення */
+.pcc-item--completing {
+    cursor: default;
+    border-color: var(--pcc-done);
+    animation: pccRowVanish 0.55s ease 0.85s forwards;
+}
+
+.pcc-item--completing .pcc-item-check {
+    background-color: var(--pcc-done);
+    border-color: var(--pcc-done);
+    transform: scale(1.08);
+}
+
+.pcc-item--completing .pcc-item-text {
+    color: var(--text-secondary);
+}
+
+.pcc-item--completing .pcc-item-text::after {
+    animation: pccStrikeThrough 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes pccStrikeThrough {
+    0% {
+        transform: scaleX(0);
+    }
+    100% {
+        transform: scaleX(1);
+    }
+}
+
+@keyframes pccRowVanish {
+    0% {
+        opacity: 1;
+        transform: translateX(0);
+        max-height: 60px;
+        padding-top: 9px;
+        padding-bottom: 9px;
+        margin-bottom: 0;
+    }
+    100% {
+        opacity: 0;
+        transform: translateX(16px);
+        max-height: 0;
+        padding-top: 0;
+        padding-bottom: 0;
+        border-width: 0;
+    }
+}
+
+.pcc-open-profile-btn {
+    width: 100%;
+    padding: 10px 16px;
+    border-radius: 9999px;
+    border: none;
+    background-color: var(--brand-berry, #c83768);
+    color: #ffffff;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(200, 55, 104, 0.22);
+    transition: background-color 0.15s ease, transform 0.15s ease;
+}
+
+.pcc-open-profile-btn:hover {
+    background-color: var(--brand-berry-hover, #b12c59);
+    transform: translateY(-1px);
+}
+
+/* =========================================================
+   ПРИВІТАЛЬНЕ МОДАЛЬНЕ ВІКНО ПЕРШОГО ВХОДУ
+   ========================================================= */
+.pcc-onboarding-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(43, 35, 40, 0.56);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    z-index: 1050;
+    box-sizing: border-box;
+}
+
+.pcc-onboarding-overlay.light {
+    --ob-bg: #fff0f5;
+    --ob-sub: #ffe5ef;
+    --ob-border: #f4c6d7;
+    --ob-text: #2b2328;
+    --ob-subtext: #7c5667;
+    --ob-accent: #c83768;
+    --ob-accent-hover: #b12c59;
+}
+
+.pcc-onboarding-overlay.dark {
+    --ob-bg: #1f1a24;
+    --ob-sub: #292230;
+    --ob-border: #3d3147;
+    --ob-text: #f8eef3;
+    --ob-subtext: #bfa6b4;
+    --ob-accent: #e05283;
+    --ob-accent-hover: #c83768;
+}
+
+.pcc-onboarding-modal {
+    width: 100%;
+    max-width: 430px;
+    padding: 26px 24px;
+    border-radius: 28px;
+    background-color: var(--ob-bg);
+    border: 1.5px solid var(--ob-border);
+    color: var(--ob-text);
+    box-shadow: 0 20px 48px rgba(0, 0, 0, 0.28);
+    text-align: center;
+    box-sizing: border-box;
+}
+
+.pcc-onboarding-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 9999px;
+    background-color: var(--ob-sub);
+    border: 1px solid var(--ob-border);
+    color: var(--ob-accent);
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.pcc-onboarding-title {
+    margin: 0 0 10px 0;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--ob-text);
+}
+
+.pcc-onboarding-text {
+    margin: 0 0 20px 0;
+    font-size: 13.5px;
+    line-height: 1.5;
+    color: var(--ob-subtext);
+}
+
+.pcc-onboarding-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.pcc-btn-secondary {
+    flex: 1;
+    padding: 11px 16px;
+    border-radius: 9999px;
+    border: 1px solid var(--ob-border);
+    background-color: var(--ob-sub);
+    color: var(--ob-text);
+    font-family: inherit;
+    font-size: 13.5px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: border-color 0.15s ease;
+}
+
+.pcc-btn-secondary:hover {
+    border-color: var(--ob-accent);
+}
+
+.pcc-btn-primary {
+    flex: 1.6;
+    padding: 11px 18px;
+    border-radius: 9999px;
+    border: none;
+    background-color: var(--ob-accent);
+    color: #ffffff;
+    font-family: inherit;
+    font-size: 13.5px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+}
+
+.pcc-btn-primary:hover {
+    background-color: var(--ob-accent-hover);
+}

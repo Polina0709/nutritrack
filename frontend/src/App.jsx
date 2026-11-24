@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import axios from 'axios';
 import ProfileModal from './components/ProfileModal';
+import { FirstLoginProfilePrompt } from './components/ProfileCompletionCard';
 import HomeOverviewTab from './components/HomeOverviewTab';
 import FoodWaterTab from './components/FoodWaterTab';
 import CycleCalendarTab from './components/CycleCalendarTab';
@@ -287,6 +288,7 @@ function App() {
         setUser(updatedUser);
         setIsProfileOpen(false);
         setRefreshTrigger((prev) => prev + 1);
+        fetchUser();
     };
 
     const handleOpenProfileFromDrawer = () => {
@@ -501,6 +503,14 @@ function App() {
                             </Routes>
                         </main>
                     </>
+                )}
+
+                {user && !isProfileOpen && (
+                    <FirstLoginProfilePrompt
+                        user={user}
+                        theme={theme}
+                        onOpenProfile={() => setIsProfileOpen(true)}
+                    />
                 )}
 
                 {isProfileOpen && (

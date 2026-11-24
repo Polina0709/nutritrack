@@ -17,6 +17,7 @@ import {
 import { MOOD_OPTIONS, SYMPTOM_OPTIONS, getTodayLocalStr, formatReadableDate } from '../constants/wellnessOptions';
 import WeightProgressSection from './WeightProgressSection';
 import WellnessTrendsSection from './WellnessTrendsSection';
+import ProfileCompletionCard from './ProfileCompletionCard';
 import './HomeOverviewTab.css';
 
 const PERIOD_CHART_TITLES = {
@@ -145,92 +146,100 @@ const HomeOverviewTab = ({ user, theme, onOpenProfile, onNavigateTab, refreshTri
 
     return (
         <div className={`home-overview-layout ${theme}`}>
-            {/* ЛІВИЙ САЙДБАР: ОСОБИСТА ІНФОРМАЦІЯ ТА ЦІЛІ (ЛИШЕ ПЕРЕГЛЯД) */}
-            <aside className="home-sidebar-card">
-                <div className="home-profile-header">
-                    <img
-                        src={user?.avatarUrl || 'https://via.placeholder.com/56'}
-                        alt="Аватар"
-                        className="home-profile-avatar"
-                        style={{ borderColor: phase?.badgeColor || '#c83768' }}
-                    />
-                    <div className="home-profile-meta">
-                        <div className="home-profile-name">{user?.name || 'Користувачка'}</div>
-                        <div className="home-profile-email">{user?.email}</div>
-                    </div>
-                </div>
-
-                {/* Статус циклу в сайдбарі */}
-                <div className="home-cycle-box">
-                    <div className="home-cycle-day">
-                        🌸 {cycleOverview?.configured ? `День циклу: ${cycleOverview.cycleDay}` : 'Цикл не налаштовано'}
-                    </div>
-                    <div className="home-cycle-phase">{phase?.name || 'Завантаження...'}</div>
-                    {cycleOverview?.predictions?.daysUntilNextPeriod !== undefined && (
-                        <div className="home-cycle-prediction">
-                            До наступної менструації: ~{Math.max(0, cycleOverview.predictions.daysUntilNextPeriod)} дн.
+            {/* ЛІВА КОЛОНКА: ОСОБИСТА ІНФОРМАЦІЯ + КРУГОВИЙ ПРОГРЕС ЗАПОВНЕННЯ ПРОФІЛЮ */}
+            <div style={{ display: 'flex', flexDirection: 'column', minWidth: 0 }}>
+                <aside className="home-sidebar-card">
+                    <div className="home-profile-header">
+                        <img
+                            src={user?.avatarUrl || 'https://via.placeholder.com/56'}
+                            alt="Аватар"
+                            className="home-profile-avatar"
+                            style={{ borderColor: phase?.badgeColor || '#c83768' }}
+                        />
+                        <div className="home-profile-meta">
+                            <div className="home-profile-name">{user?.name || 'Користувачка'}</div>
+                            <div className="home-profile-email">{user?.email}</div>
                         </div>
-                    )}
-                </div>
+                    </div>
 
-                <h4 className="home-sidebar-heading">🎯 Мої параметри та цілі</h4>
-
-                <div className="home-params-list">
-                    <div className="home-param-row">
-                        <span className="home-param-label">Поточна вага:</span>
-                        <strong>{user?.weight ? `${user.weight} кг` : '—'}</strong>
-                    </div>
-                    <div className="home-param-row">
-                        <span className="home-param-label">Цільова вага:</span>
-                        <strong>{user?.targetWeight ? `${user.targetWeight} кг` : '—'}</strong>
-                    </div>
-                    <div className="home-param-row">
-                        <span className="home-param-label">Вік / Зріст:</span>
-                        <strong>
-                            {user?.age ? `${user.age} р.` : '—'} / {user?.height ? `${user.height} см` : '—'}
-                        </strong>
-                    </div>
-                    <div className="home-param-row home-param-row--stacked">
-                        <div className="home-param-row-top">
-                            <span className="home-param-label">
-                                {dynamicGoal?.hasAdjustment ? 'Норма ккал сьогодні:' : 'Денна норма ккал:'}
-                            </span>
-                            <strong className="home-accent-berry">{effectiveCalorieGoal} ккал</strong>
+                    {/* Статус циклу в сайдбарі */}
+                    <div className="home-cycle-box">
+                        <div className="home-cycle-day">
+                            🌸 {cycleOverview?.configured ? `День циклу: ${cycleOverview.cycleDay}` : 'Цикл не налаштовано'}
                         </div>
-                        {dynamicGoal?.hasAdjustment && (
-                            <div className="home-dynamic-note">
-                                База {dynamicGoal.baseGoal}
-                                {dynamicGoal.activityBonus > 0 ? ` + ${dynamicGoal.activityBonus} спорт` : ''}
-                                {dynamicGoal.lutealBonus > 0 ? ` + ${dynamicGoal.lutealBonus} фаза` : ''}
+                        <div className="home-cycle-phase">{phase?.name || 'Завантаження...'}</div>
+                        {cycleOverview?.predictions?.daysUntilNextPeriod !== undefined && (
+                            <div className="home-cycle-prediction">
+                                До наступної менструації: ~{Math.max(0, cycleOverview.predictions.daysUntilNextPeriod)} дн.
                             </div>
                         )}
                     </div>
-                    <div className="home-param-row">
-                        <span className="home-param-label">Білки / Жири / Вугл.:</span>
-                        <strong>
-                            {user?.proteinGoal || 150} / {user?.fatGoal || 70} / {user?.carbGoal || 200} г
-                        </strong>
-                    </div>
-                    <div className="home-param-row">
-                        <span className="home-param-label">Норма води (склянка):</span>
-                        <strong className="home-accent-water">
-                            {waterGoal} мл ({glassVolume} мл)
-                        </strong>
-                    </div>
-                    <div className="home-param-row home-param-row--last">
-                        <span className="home-param-label">
-                            Цикл / менструація{isAutoCalculated ? ' (сер.)' : ''}:
-                        </span>
-                        <strong>
-                            {displayCycleLength} / {displayPeriodLength} дн.
-                        </strong>
-                    </div>
-                </div>
 
-                <button type="button" onClick={onOpenProfile} className="home-sidebar-edit-btn">
-                    ⚙️ Змінити параметри в профілі
-                </button>
-            </aside>
+                    <h4 className="home-sidebar-heading">🎯 Мої параметри та цілі</h4>
+
+                    <div className="home-params-list">
+                        <div className="home-param-row">
+                            <span className="home-param-label">Поточна вага:</span>
+                            <strong>{user?.weight ? `${user.weight} кг` : '—'}</strong>
+                        </div>
+                        <div className="home-param-row">
+                            <span className="home-param-label">Цільова вага:</span>
+                            <strong>{user?.targetWeight ? `${user.targetWeight} кг` : '—'}</strong>
+                        </div>
+                        <div className="home-param-row">
+                            <span className="home-param-label">Вік / Зріст:</span>
+                            <strong>
+                                {user?.age ? `${user.age} р.` : '—'} / {user?.height ? `${user.height} см` : '—'}
+                            </strong>
+                        </div>
+                        <div className="home-param-row home-param-row--stacked">
+                            <div className="home-param-row-top">
+                                <span className="home-param-label">
+                                    {dynamicGoal?.hasAdjustment ? 'Норма ккал сьогодні:' : 'Денна норма ккал:'}
+                                </span>
+                                <strong className="home-accent-berry">{effectiveCalorieGoal} ккал</strong>
+                            </div>
+                            {dynamicGoal?.hasAdjustment && (
+                                <div className="home-dynamic-note">
+                                    База {dynamicGoal.baseGoal}
+                                    {dynamicGoal.activityBonus > 0 ? ` + ${dynamicGoal.activityBonus} спорт` : ''}
+                                    {dynamicGoal.lutealBonus > 0 ? ` + ${dynamicGoal.lutealBonus} фаза` : ''}
+                                </div>
+                            )}
+                        </div>
+                        <div className="home-param-row">
+                            <span className="home-param-label">Білки / Жири / Вугл.:</span>
+                            <strong>
+                                {user?.proteinGoal || 150} / {user?.fatGoal || 70} / {user?.carbGoal || 200} г
+                            </strong>
+                        </div>
+                        <div className="home-param-row">
+                            <span className="home-param-label">Норма води (склянка):</span>
+                            <strong className="home-accent-water">
+                                {waterGoal} мл ({glassVolume} мл)
+                            </strong>
+                        </div>
+                        <div className="home-param-row home-param-row--last">
+                            <span className="home-param-label">
+                                Цикл / менструація{isAutoCalculated ? ' (сер.)' : ''}:
+                            </span>
+                            <strong>
+                                {displayCycleLength} / {displayPeriodLength} дн.
+                            </strong>
+                        </div>
+                    </div>
+
+                    <button type="button" onClick={onOpenProfile} className="home-sidebar-edit-btn">
+                        ⚙️ Змінити параметри в профілі
+                    </button>
+                </aside>
+
+                <ProfileCompletionCard
+                    user={user}
+                    theme={theme}
+                    onOpenProfile={onOpenProfile}
+                />
+            </div>
 
             {/* ЦЕНТРАЛЬНА ЗОНА: ПІДКАЗКИ ФАЗИ + ЧЕК-ІН + ВАГА + СТАТИСТИКА + ТРЕНДИ */}
             <div className="home-main-column">
