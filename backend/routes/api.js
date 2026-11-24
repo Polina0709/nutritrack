@@ -1610,10 +1610,105 @@ router.delete('/medications/:id', isAuthenticated, async (req, res) => {
 });
 
 // ==========================================
-// 9. FATSECRET API (ГЛОБАЛЬНИЙ ПОШУК)
+// 9. FATSECRET API + УКРАЇНСЬКИЙ ПОШУК (ПЕРЕКЛАД + OPEN FOOD FACTS UA)
 // ==========================================
 let fsAccessToken = null;
 let fsTokenExpiry = null;
+const translationCache = new Map();
+
+const hasCyrillic = (text = '') => /[а-яіїєґА-ЯІЇЄҐ]/.test(text);
+
+async function translateText(text, sourceLang, targetLang) {
+    const clean = (text || '').trim();
+    if (!clean) return clean;
+
+    const cacheKey = `${sourceLang}:${targetLang}:${clean.toLowerCase()}`;
+    if (translationCache.has(cacheKey)) {
+        return translationCache.get(cacheKey);
+    }
+
+    try {
+        const { data } = await axios.get('https://translate.googleapis.com/translate_a/single', {
+            params: {
+                client: 'gtx',
+                sl: sourceLang,
+                tl: targetLang,
+                dt: 't',
+                q: clean,
+            },
+            timeout: 2500,
+        });
+
+        const translated = Array.isArray(data?.[0])
+            ? data[0].map((part) => part?.[0] || '').join('').trim()
+            : clean;
+
+        if (translated) {
+            if (translationCache.size > 2000) translationCache.clear();
+            translationCache.set(cacheKey, translated);
+            return translated;
+        }
+        return clean;
+    } catch {
+        return clean;
+    }
+}
+
+async function searchOpenFoodFactsUA(query, limit = 6) {
+    try {
+        const { data } = await axios.get('https://uk.openfoodfacts.org/cgi/search.pl', {
+            params: {
+                search_terms: query,
+                search_simple: 1,
+                action: 'process',
+                json: 1,
+                page_size: limit,
+                fields: 'code,product_name,product_name_uk,brands,image_front_small_url,nutriments',
+            },
+            headers: {
+                'User-Agent': 'NutriTrack/1.0 (https://nutritrack-cu8u.onrender.com)',
+            },
+            timeout: 3500,
+        });
+
+        const products = Array.isArray(data?.products) ? data.products : [];
+
+        return products
+            .map((p) => {
+                const name = (p.product_name_uk || p.product_name || '').trim();
+                const n = p.nutriments || {};
+                const rawKcal =
+                    n['energy-kcal_100g'] ??
+                    n['energy-kcal'] ??
+                    (n['energy_100g'] ? Number(n['energy_100g']) / 4.184 : null);
+
+                if (!name || rawKcal === null || Number.isNaN(Number(rawKcal))) return null;
+
+                const calories = Math.round(Number(rawKcal) * 10) / 10;
+                const proteins = Math.round((Number(n['proteins_100g']) || 0) * 10) / 10;
+                const fats = Math.round((Number(n['fat_100g']) || 0) * 10) / 10;
+                const carbs = Math.round((Number(n['carbohydrates_100g']) || 0) * 10) / 10;
+
+                return {
+                    id: `off-${p.code}`,
+                    product_name: name,
+                    brand: (p.brands || 'Open Food Facts UA').split(',')[0].trim(),
+                    description: `Ккал: ${calories} | Б: ${proteins}г | Ж: ${fats}г | В: ${carbs}г (на 100г)`,
+                    isCustom: true,
+                    image_url: p.image_front_small_url || 'https://via.placeholder.com/100?text=UA',
+                    nutriments: {
+                        'energy-kcal_100g': calories,
+                        'proteins_100g': proteins,
+                        'fat_100g': fats,
+                        'carbohydrates_100g': carbs,
+                    },
+                };
+            })
+            .filter(Boolean);
+    } catch {
+        return [];
+    }
+}
 
 async function getFatSecretToken(forceRefresh = false) {
     if (!forceRefresh && fsAccessToken && fsTokenExpiry && Date.now() < fsTokenExpiry) {
@@ -1690,52 +1785,94 @@ function normalizeFatSecretFoods(rawFoods) {
     });
 }
 
+async function fetchFatSecretFoods(searchExpression, maxResults) {
+    const runSearch = async (forceRefreshToken = false) => {
+        const token = await getFatSecretToken(forceRefreshToken);
+        return axios.get('https://platform.fatsecret.com/rest/server.api', {
+            params: {
+                method: 'foods.search',
+                search_expression: searchExpression,
+                format: 'json',
+                max_results: maxResults,
+            },
+            headers: { Authorization: `Bearer ${token}` },
+            timeout: 8000,
+        });
+    };
+
+    let response;
+    try {
+        response = await runSearch(false);
+    } catch (err) {
+        if (err.response && err.response.status === 401) {
+            response = await runSearch(true);
+        } else {
+            throw err;
+        }
+    }
+
+    if (response.data?.error) {
+        const code = response.data.error.code;
+        if (code === 13 || code === 14 || /token|auth/i.test(response.data.error.message || '')) {
+            response = await runSearch(true);
+        } else {
+            throw new Error(response.data.error.message || 'Помилка FatSecret API');
+        }
+    }
+
+    return normalizeFatSecretFoods(response.data?.foods?.food);
+}
+
 router.get('/fatsecret/search', isAuthenticated, async (req, res) => {
     try {
         const query = (req.query.query || '').trim();
         const maxResults = Math.min(25, Math.max(1, parseInt(req.query.maxResults, 10) || 15));
         if (!query || query.length < 2) return res.json([]);
 
-        const runSearch = async (forceRefreshToken = false) => {
-            const token = await getFatSecretToken(forceRefreshToken);
-            return axios.get('https://platform.fatsecret.com/rest/server.api', {
-                params: {
-                    method: 'foods.search',
-                    search_expression: query,
-                    format: 'json',
-                    max_results: maxResults,
-                },
-                headers: { Authorization: `Bearer ${token}` },
-                timeout: 8000,
-            });
-        };
+        const isUkrainianQuery = hasCyrillic(query);
 
-        let response;
-        try {
-            response = await runSearch(false);
-        } catch (err) {
-            if (err.response && err.response.status === 401) {
-                response = await runSearch(true);
-            } else {
-                throw err;
-            }
+        // Якщо запит латиницею — шукаємо напряму у FatSecret без перекладу
+        if (!isUkrainianQuery) {
+            const foods = await fetchFatSecretFoods(query, maxResults);
+            return res.json(foods);
         }
 
-        if (response.data?.error) {
-            const code = response.data.error.code;
-            if (code === 13 || code === 14 || /token|auth/i.test(response.data.error.message || '')) {
-                response = await runSearch(true);
-            } else {
-                return res.status(400).json({ error: response.data.error.message || 'Помилка FatSecret API' });
-            }
+        // Якщо запит українською — перекладаємо для FatSecret та паралельно шукаємо в українському Open Food Facts
+        const englishQuery = await translateText(query, 'uk', 'en');
+
+        const [fsSettled, offUaSettled] = await Promise.allSettled([
+            !hasCyrillic(englishQuery)
+                ? fetchFatSecretFoods(englishQuery, maxResults)
+                : Promise.resolve([]),
+            searchOpenFoodFactsUA(query, 6),
+        ]);
+
+        let fsFoods = fsSettled.status === 'fulfilled' ? fsSettled.value : [];
+        const offUaFoods = offUaSettled.status === 'fulfilled' ? offUaSettled.value : [];
+
+        // Перекладаємо назви знайдених продуктів із FatSecret українською (збережемо англійську назву в описі)
+        if (fsFoods.length > 0) {
+            fsFoods = await Promise.all(
+                fsFoods.map(async (item) => {
+                    const ukName = await translateText(item.product_name, 'en', 'uk');
+                    return {
+                        ...item,
+                        product_name: ukName,
+                        description:
+                            ukName.toLowerCase() !== item.product_name.toLowerCase()
+                                ? `${item.product_name} • ${item.description}`
+                                : item.description,
+                    };
+                })
+            );
         }
 
-        const foods = normalizeFatSecretFoods(response.data?.foods?.food);
-        res.json(foods);
+        const combined = [...offUaFoods, ...fsFoods].slice(0, maxResults);
+        res.json(combined);
     } catch (error) {
         console.error('FatSecret Search Error:', error.response?.data || error.message);
         res.status(500).json({
-            error: 'Помилка при запиті до FatSecret',
+            error: 'Помилка при запиті до бази продуктів',
             details: error.message,
         });
     }
