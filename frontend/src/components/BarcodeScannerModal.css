@@ -1,0 +1,158 @@
+/* frontend/src/components/BarcodeScannerModal.css */
+
+.barcode-scanner-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(20, 15, 22, 0.72);
+    backdrop-filter: blur(5px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1200;
+    padding: 16px;
+    box-sizing: border-box;
+}
+
+.barcode-scanner-overlay.light {
+    --bs-bg: #fff0f5;
+    --bs-sub-bg: #ffe5ef;
+    --bs-input-bg: #ffffff;
+    --bs-border: #f4c6d7;
+    --bs-text: #2b2328;
+    --bs-subtext: #7c5667;
+    --bs-berry: #c83768;
+    --bs-berry-hover: #b12c59;
+    --bs-danger: #d32f2f;
+}
+
+.barcode-scanner-overlay.dark {
+    --bs-bg: #1f1a24;
+    --bs-sub-bg: #292230;
+    --bs-input-bg: #141118;
+    --bs-border: #3d3147;
+    --bs-text: #f8eef3;
+    --bs-subtext: #bfa6b4;
+    --bs-berry: #f472b6;
+    --bs-berry-hover: #ec4899;
+    --bs-danger: #f87171;
+}
+
+.bs-modal {
+    width: 100%;
+    max-width: 420px;
+    background: var(--bs-bg);
+    color: var(--bs-text);
+    border: 1.5px solid var(--bs-border);
+    border-radius: 26px;
+    padding: 20px;
+    position: relative;
+    box-shadow: 0 22px 50px rgba(0, 0, 0, 0.45);
+    box-sizing: border-box;
+}
+
+.bs-close-btn {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 1px solid var(--bs-border);
+    background: var(--bs-sub-bg);
+    color: var(--bs-subtext);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+}
+
+.bs-title {
+    margin: 0 0 4px 0;
+    padding-right: 36px;
+    font-size: 17px;
+    font-weight: 700;
+}
+
+.bs-subtitle {
+    margin: 0 0 12px 0;
+    font-size: 12.5px;
+    color: var(--bs-subtext);
+}
+
+.bs-viewport-wrap {
+    position: relative;
+    width: 100%;
+    min-height: 230px;
+    border-radius: 18px;
+    overflow: hidden;
+    background: #111111;
+    border: 1.5px solid var(--bs-border);
+    margin-bottom: 12px;
+}
+
+.bs-reader-box {
+    width: 100%;
+}
+
+.bs-reader-box video {
+    width: 100% !important;
+    height: auto !important;
+    display: block;
+    object-fit: cover;
+}
+
+.bs-status-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 600;
+    background: rgba(0, 0, 0, 0.55);
+}
+
+.bs-error {
+    font-size: 12px;
+    color: var(--bs-danger);
+    font-weight: 600;
+    margin-bottom: 10px;
+    line-height: 1.4;
+}
+
+.bs-manual-form {
+    display: flex;
+    gap: 8px;
+}
+
+.bs-manual-input {
+    flex: 1;
+    min-width: 0;
+    padding: 9px 14px;
+    border-radius: 9999px;
+    border: 1px solid var(--bs-border);
+    background: var(--bs-input-bg);
+    color: var(--bs-text);
+    font-family: inherit;
+    font-size: 16px;
+    outline: none;
+}
+
+.bs-manual-btn {
+    flex-shrink: 0;
+    padding: 9px 16px;
+    border-radius: 9999px;
+    border: none;
+    background: var(--bs-berry);
+    color: #ffffff;
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.bs-manual-btn:hover {
+    background: var(--bs-berry-hover);
+}

@@ -1,7 +1,31 @@
 // frontend/src/components/SearchModal.jsx
 import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
+import BarcodeScannerModal from './BarcodeScannerModal';
 import './SearchModal.css';
+
+const ScanBarcodeIcon = () => (
+    <svg
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        aria-hidden="true"
+    >
+        <path d="M4 8V6a2 2 0 0 1 2-2h2" />
+        <path d="M16 4h2a2 2 0 0 1 2 2v2" />
+        <path d="M20 16v2a2 2 0 0 1-2 2h-2" />
+        <path d="M8 20H6a2 2 0 0 1-2-2v-2" />
+        <line x1="8" y1="8" x2="8" y2="16" />
+        <line x1="12" y1="8" x2="12" y2="16" />
+        <line x1="16" y1="8" x2="16" y2="16" />
+        <line x1="6" y1="12" x2="18" y2="12" strokeWidth="1.6" />
+    </svg>
+);
 
 const SearchModal = ({ isOpen, onClose, mealType, mealLabel, onAddSuccess, theme = 'light' }) => {
     const [activeTab, setActiveTab] = useState('GLOBAL'); // 'GLOBAL', 'CUSTOM', 'RECIPE'
@@ -11,6 +35,12 @@ const SearchModal = ({ isOpen, onClose, mealType, mealLabel, onAddSuccess, theme
     const [suggestions, setSuggestions] = useState([]);
     const [showSuggestions, setShowSuggestions] = useState(false);
     const [errorMsg, setErrorMsg] = useState('');
+
+    // Сканер штрихкодів
+    const [isScannerOpen, setIsScannerOpen] = useState(false);
+    const [scannerTargetMode, setScannerTargetMode] = useState('MEAL'); // 'MEAL' | 'INGREDIENT'
+    const [barcodeLoading, setBarcodeLoading] = useState(false);
+    const [unfoundBarcode, setUnfoundBarcode] = useState('');
 
     const [customFoods, setCustomFoods] = useState([]);
     const [recipes, setRecipes] = useState([]);
@@ -58,6 +88,7 @@ const SearchModal = ({ isOpen, onClose, mealType, mealLabel, onAddSuccess, theme
             setSuggestions([]);
             setShowSuggestions(false);
             setErrorMsg('');
+            setUnfoundBarcode('');
             if (currentSource === 'CUSTOM') fetchCustomFoods('');
             if (currentSource === 'RECIPE' && recipeStep === 'LIST') fetchRecipes('');
             return;
@@ -67,6 +98,7 @@ const SearchModal = ({ isOpen, onClose, mealType, mealLabel, onAddSuccess, theme
             if (currentSource === 'GLOBAL') {
                 setSuggestLoading(true);
                 setErrorMsg('');
+                setUnfoundBarcode('');
                 try {
                     const res = await axios.get(
                         `/api/fatsecret/search?query=${encodeURIComponent(trimmed)}&maxResults=8`
@@ -107,6 +139,7 @@ const SearchModal = ({ isOpen, onClose, mealType, mealLabel, onAddSuccess, theme
         if (!trimmed) return;
         setLoading(true);
         setErrorMsg('');
+        setUnfoundBarcode('');
         setShowSuggestions(false);
         try {
             const response = await axios.get(
@@ -125,6 +158,32 @@ const SearchModal = ({ isOpen, onClose, mealType, mealLabel, onAddSuccess, theme
     const handleGlobalSearch = async (e) => {
         e.preventDefault();
         await executeGlobalSearch(query);
+    };
+
+    const handleBarcodeDetected = async (barcodeDigits) => {
+        setIsScannerOpen(false);
+        setBarcodeLoading(true);
+        setErrorMsg('');
+        setUnfoundBarcode('');
+        setShowSuggestions(false);
+
+        try {
+            const res = await axios.get(`/api/barcode/${encodeURIComponent(barcodeDigits)}`);
+            if (scannerTargetMode === 'INGREDIENT') {
+                handlePickIngredient(res.data);
+            } else {
+                setSelectedProduct(res.data);
+            }
+        } catch (err) {
+            if (err.response?.status === 404) {
+                setUnfoundBarcode(barcodeDigits);
+                setErrorMsg(`Товар зі штрихкодом ${barcodeDigits} не знайдено в базі.`);
+            } else {
+                setErrorMsg(err.response?.data?.error || 'Не вдалося розпізнати штрихкод');
+            }
+        } finally {
+            setBarcodeLoading(false);
+        }
     };
 
     const fetchCustomFoods = async (searchQuery = '') => {
@@ -247,7 +306,7 @@ const SearchModal = ({ isOpen, onClose, mealType, mealLabel, onAddSuccess, theme
 
     const handleSaveRecipe = async (e) => {
         e.preventDefault();
-        if (rIngredients.length === 0) return alert('Додайте інгредієнти!');
+        if (rIngredients.length === 0) return alert('Додайте інгредінти!');
         if (!rTitle.trim()) return alert('Введіть назву');
 
         const formattedInstructions = `🛒 Інгредінти:\n${rIngredients
@@ -369,6 +428,13 @@ const SearchModal = ({ isOpen, onClose, mealType, mealLabel, onAddSuccess, theme
     const getHealthInsights = (product) => {
         if (product.isRecipe) {
             return ['🥘 Домашній збалансований рецепт.', '✅ Ви контролюєте кожний інгредієнт.'];
+        }
+        if (product.id && product.id.toString().startsWith('off-')) {
+            return [
+                `🏢 ${product.brand || 'Open Food Facts'}`,
+                '📷 Знайдено за штрихкодом',
+                product.description ? `ℹ️ ${product.description}` : '',
+            ].filter(Boolean);
         }
         if (product.id && product.id.toString().startsWith('fs-')) {
             return [
@@ -516,7 +582,8 @@ const SearchModal = ({ isOpen, onClose, mealType, mealLabel, onAddSuccess, theme
         selectedProduct &&
         selectedProduct.isCustom &&
         !selectedProduct.isRecipe &&
-        !String(selectedProduct.id).startsWith('fs-');
+        !String(selectedProduct.id).startsWith('fs-') &&
+        !String(selectedProduct.id).startsWith('off-');
 
     const isUserRecipe = selectedProduct && selectedProduct.isRecipe;
 
@@ -790,9 +857,23 @@ const SearchModal = ({ isOpen, onClose, mealType, mealLabel, onAddSuccess, theme
                                             value={query}
                                             onFocus={() => query.trim().length >= 2 && setShowSuggestions(true)}
                                             onChange={(e) => setQuery(e.target.value)}
-                                            placeholder="Почніть вводити інгредієнт..."
+                                            placeholder="Інгредієнт або штрихкод..."
                                             className="sm-search-input"
                                         />
+                                        {ingTab === 'GLOBAL' && (
+                                            <button
+                                                type="button"
+                                                onClick={() => {
+                                                    setScannerTargetMode('INGREDIENT');
+                                                    setIsScannerOpen(true);
+                                                }}
+                                                title="Сканувати штрихкод камерою"
+                                                aria-label="Сканувати штрихкод камерою"
+                                                className="sm-scan-btn sm-scan-btn--amber"
+                                            >
+                                                <ScanBarcodeIcon />
+                                            </button>
+                                        )}
                                         <button
                                             type="submit"
                                             className="sm-search-submit sm-search-submit--amber"
@@ -803,6 +884,9 @@ const SearchModal = ({ isOpen, onClose, mealType, mealLabel, onAddSuccess, theme
                                     {renderAutocompleteDropdown(true)}
                                 </div>
 
+                                {barcodeLoading && (
+                                    <div className="sm-status-banner">Пошук товару за штрихкодом...</div>
+                                )}
                                 {errorMsg && <div className="sm-error-msg">{errorMsg}</div>}
 
                                 {ingTab === 'GLOBAL'
@@ -896,16 +980,18 @@ const SearchModal = ({ isOpen, onClose, mealType, mealLabel, onAddSuccess, theme
                                     setActiveTab('GLOBAL');
                                     setIsCreatingCustom(false);
                                     setShowSuggestions(false);
+                                    setUnfoundBarcode('');
                                 }}
                                 className={`sm-tab-btn ${activeTab === 'GLOBAL' ? 'active' : ''}`}
                             >
-                                🌍 FatSecret
+                                🌍 База / Код
                             </button>
                             <button
                                 type="button"
                                 onClick={() => {
                                     setActiveTab('CUSTOM');
                                     setShowSuggestions(false);
+                                    setUnfoundBarcode('');
                                 }}
                                 className={`sm-tab-btn ${activeTab === 'CUSTOM' ? 'active' : ''}`}
                             >
@@ -919,6 +1005,7 @@ const SearchModal = ({ isOpen, onClose, mealType, mealLabel, onAddSuccess, theme
                                     setQuery('');
                                     setSuggestions([]);
                                     setShowSuggestions(false);
+                                    setUnfoundBarcode('');
                                     setRecipeStep('LIST');
                                 }}
                                 className={`sm-tab-btn ${activeTab === 'RECIPE' ? 'active' : ''}`}
@@ -936,9 +1023,21 @@ const SearchModal = ({ isOpen, onClose, mealType, mealLabel, onAddSuccess, theme
                                             value={query}
                                             onFocus={() => query.trim().length >= 2 && setShowSuggestions(true)}
                                             onChange={(e) => setQuery(e.target.value)}
-                                            placeholder="Почніть вводити (Борщ, Chicken, Snickers)..."
+                                            placeholder="Назва продукту або штрихкод..."
                                             className="sm-search-input"
                                         />
+                                        <button
+                                            type="button"
+                                            onClick={() => {
+                                                setScannerTargetMode('MEAL');
+                                                setIsScannerOpen(true);
+                                            }}
+                                            title="Сканувати штрихкод камерою"
+                                            aria-label="Сканувати штрихкод камерою"
+                                            className="sm-scan-btn"
+                                        >
+                                            <ScanBarcodeIcon />
+                                        </button>
                                         <button
                                             type="submit"
                                             disabled={loading}
@@ -950,7 +1049,29 @@ const SearchModal = ({ isOpen, onClose, mealType, mealLabel, onAddSuccess, theme
                                     {renderAutocompleteDropdown(false)}
                                 </div>
 
+                                {barcodeLoading && (
+                                    <div className="sm-status-banner">Пошук товару за штрихкодом...</div>
+                                )}
+
                                 {errorMsg && <div className="sm-error-msg">{errorMsg}</div>}
+
+                                {unfoundBarcode && (
+                                    <div className="sm-unfound-box">
+                                        <span>Хочете додати цей товар за етикеткою?</span>
+                                        <button
+                                            type="button"
+                                            onClick={() => {
+                                                setUnfoundBarcode('');
+                                                setErrorMsg('');
+                                                setActiveTab('CUSTOM');
+                                                setIsCreatingCustom(true);
+                                            }}
+                                            className="sm-unfound-create-btn"
+                                        >
+                                            ➕ Створити продукт
+                                        </button>
+                                    </div>
+                                )}
 
                                 {renderProductList(results)}
                             </>
@@ -1071,7 +1192,6 @@ const SearchModal = ({ isOpen, onClose, mealType, mealLabel, onAddSuccess, theme
                                     + Створити рецепт
                                 </button>
 
-                                {/* Пошук по власних рецептах */}
                                 <div className="sm-search-rel">
                                     <div className="sm-clear-input-wrap">
                                         <input
@@ -1144,6 +1264,13 @@ const SearchModal = ({ isOpen, onClose, mealType, mealLabel, onAddSuccess, theme
                     </>
                 )}
             </div>
+
+            <BarcodeScannerModal
+                isOpen={isScannerOpen}
+                onClose={() => setIsScannerOpen(false)}
+                onDetected={handleBarcodeDetected}
+                theme={theme}
+            />
         </div>
     );
 };

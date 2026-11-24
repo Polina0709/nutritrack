@@ -103,6 +103,7 @@ app.use(async (req, res, next) => {
 
 app.use('/auth', require('./routes/auth'));
 app.use('/', require('./routes/admin'));
+app.use('/api/barcode', require('./routes/barcodeRoutes'));
 app.use('/api', require('./routes/api'));
 
 // 5. Роздача зібраного React-фронтенду у production або резервний EJS-рендер локально
