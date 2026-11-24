@@ -132,7 +132,6 @@ const ProfileCompletionCard = ({ user, theme = 'light', onOpenProfile }) => {
         const currentDoneIds = items.filter((item) => item.done).map((item) => item.id);
         const currentDoneSet = new Set(currentDoneIds);
 
-        // Перша ініціалізація при завантаженні сторінки
         if (prevDoneIdsRef.current === null) {
             prevDoneIdsRef.current = currentDoneSet;
             setHiddenIds(currentDoneIds);
@@ -140,11 +139,7 @@ const ProfileCompletionCard = ({ user, theme = 'light', onOpenProfile }) => {
         }
 
         const prevDoneSet = prevDoneIdsRef.current;
-
-        // Пункти, які користувач щойно заповнив
         const newlyCompleted = currentDoneIds.filter((id) => !prevDoneSet.has(id));
-
-        // Пункти, які користувач очистив у профілі
         const reverted = [...prevDoneSet].filter((id) => !currentDoneSet.has(id));
 
         if (reverted.length > 0) {
@@ -166,7 +161,6 @@ const ProfileCompletionCard = ({ user, theme = 'light', onOpenProfile }) => {
                 if (timersRef.current[id]) {
                     clearTimeout(timersRef.current[id]);
                 }
-                // Спочатку анімація закреслення (0–650 мс), потім зникнення (650–1400 мс)
                 timersRef.current[id] = setTimeout(() => {
                     setAnimatingIds((prev) => prev.filter((itemId) => itemId !== id));
                     setHiddenIds((prev) => [...new Set([...prev, id])]);
@@ -192,16 +186,14 @@ const ProfileCompletionCard = ({ user, theme = 'light', onOpenProfile }) => {
     const percentage = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 100;
     const isAllCompleted = completedCount === totalCount;
 
-    // Коли всі дані заповнені й анімація останнього пункту завершилась — приховуємо картку
     if (isAllCompleted && animatingIds.length === 0) {
         return null;
     }
 
     const visibleItems = items.filter((item) => !hiddenIds.includes(item.id));
 
-    // Геометрія SVG-кільця прогресу
-    const size = 104;
-    const strokeWidth = 9;
+    const size = 88;
+    const strokeWidth = 8;
     const radius = (size - strokeWidth) / 2;
     const circumference = 2 * Math.PI * radius;
     const strokeDashoffset = circumference - (percentage / 100) * circumference;

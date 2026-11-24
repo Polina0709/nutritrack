@@ -147,7 +147,7 @@ const HomeOverviewTab = ({ user, theme, onOpenProfile, onNavigateTab, refreshTri
     return (
         <div className={`home-overview-layout ${theme}`}>
             {/* ЛІВА КОЛОНКА: ОСОБИСТА ІНФОРМАЦІЯ + КРУГОВИЙ ПРОГРЕС ЗАПОВНЕННЯ ПРОФІЛЮ */}
-            <div style={{ display: 'flex', flexDirection: 'column', minWidth: 0 }}>
+            <div className="home-sidebar-column">
                 <aside className="home-sidebar-card">
                     <div className="home-profile-header">
                         <img

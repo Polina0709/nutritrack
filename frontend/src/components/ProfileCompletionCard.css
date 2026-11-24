@@ -1,17 +1,42 @@
 /* frontend/src/components/ProfileCompletionCard.css */
 
 /* =========================================================
+   ВИРІВНЮВАННЯ ЛІВОЇ КОЛОНКИ ТА ЗАХИСТ ВІД ВИХОДУ ЗА КРАЙ
+   ========================================================= */
+.home-overview-layout,
+.home-sidebar-column,
+.home-main-column {
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+.home-sidebar-column {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.home-sidebar-column > .home-sidebar-card,
+.home-sidebar-column > .pcc-card {
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+/* =========================================================
    КАРТКА КРУГОВОГО ПРОГРЕСУ ТА ЧЕК-ЛИСТА
    ========================================================= */
 .pcc-card {
-    margin-top: 16px;
-    padding: 18px 20px;
+    padding: 18px 18px;
     border-radius: 24px;
     border: 1.5px solid var(--border-color, #f4c6d7);
     background-color: var(--surface-bg, #fff0f5);
     box-shadow: var(--card-shadow, 0 8px 24px rgba(200, 55, 104, 0.14));
+    overflow: hidden;
     transition: opacity 0.45s ease, transform 0.45s ease;
-    box-sizing: border-box;
 }
 
 .pcc-card.light {
@@ -40,22 +65,24 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 10px;
-    margin-bottom: 12px;
+    gap: 8px;
+    margin-bottom: 10px;
 }
 
 .pcc-title {
     margin: 0;
-    font-size: 15px;
+    font-size: 14.5px;
     font-weight: 700;
     color: var(--text-primary);
 }
 
 .pcc-counter {
-    padding: 3px 10px;
+    padding: 2px 9px;
     border-radius: 9999px;
-    font-size: 12px;
+    font-size: 11.5px;
     font-weight: 700;
+    white-space: nowrap;
+    flex-shrink: 0;
     background-color: var(--pcc-item-bg);
     color: var(--accent-primary);
     border: 1px solid var(--border-color);
@@ -66,17 +93,17 @@
    ========================================================= */
 .pcc-ring-wrapper {
     position: relative;
-    width: 104px;
-    height: 104px;
-    margin: 6px auto 16px auto;
+    width: 88px;
+    height: 88px;
+    margin: 4px auto 14px auto;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
 .pcc-ring-svg {
+    display: block;
     transform: rotate(-90deg);
-    overflow: visible;
 }
 
 .pcc-ring-track {
@@ -106,14 +133,14 @@
 }
 
 .pcc-ring-percent {
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 700;
     line-height: 1.1;
     color: var(--text-primary);
 }
 
 .pcc-ring-sub {
-    font-size: 11px;
+    font-size: 10.5px;
     font-weight: 600;
     color: var(--text-secondary);
     margin-top: 2px;
@@ -124,27 +151,28 @@
    ========================================================= */
 .pcc-checklist {
     list-style: none;
-    margin: 0 0 14px 0;
+    margin: 0 0 12px 0;
     padding: 0;
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 7px;
 }
 
 .pcc-item {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 9px 13px;
-    border-radius: 14px;
+    gap: 9px;
+    padding: 8px 12px;
+    border-radius: 13px;
     background-color: var(--pcc-item-bg);
     border: 1px solid var(--border-color);
     color: var(--text-primary);
-    font-size: 13px;
+    font-size: 12.5px;
     font-weight: 600;
     cursor: pointer;
-    max-height: 60px;
+    max-height: 56px;
     overflow: hidden;
+    box-sizing: border-box;
     transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
 }
 
@@ -155,43 +183,44 @@
 }
 
 .pcc-item-check {
-    width: 19px;
-    height: 19px;
+    width: 15px;
+    height: 15px;
+    min-width: 15px;
     border-radius: 50%;
-    border: 1.8px solid var(--accent-primary);
+    border: 1.5px solid var(--accent-primary);
     background-color: transparent;
     color: #ffffff;
-    font-size: 11px;
+    font-size: 10px;
     font-weight: 700;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+    box-sizing: border-box;
     transition: background-color 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
 }
 
 .pcc-item-text {
     position: relative;
     display: inline-block;
-    line-height: 1.35;
+    min-width: 0;
+    line-height: 1.3;
     transition: color 0.3s ease;
 }
 
-/* Лінія анімованого закреслення */
 .pcc-item-text::after {
     content: '';
     position: absolute;
     left: 0;
     top: 52%;
     width: 100%;
-    height: 2px;
+    height: 1.8px;
     border-radius: 2px;
     background-color: var(--pcc-strike);
     transform: scaleX(0);
     transform-origin: left center;
 }
 
-/* Стан щойно заповненого пункту: закреслення + плавне зникнення */
 .pcc-item--completing {
     cursor: default;
     border-color: var(--pcc-done);
@@ -225,14 +254,14 @@
     0% {
         opacity: 1;
         transform: translateX(0);
-        max-height: 60px;
-        padding-top: 9px;
-        padding-bottom: 9px;
+        max-height: 56px;
+        padding-top: 8px;
+        padding-bottom: 8px;
         margin-bottom: 0;
     }
     100% {
         opacity: 0;
-        transform: translateX(16px);
+        transform: translateX(14px);
         max-height: 0;
         padding-top: 0;
         padding-bottom: 0;
@@ -242,13 +271,13 @@
 
 .pcc-open-profile-btn {
     width: 100%;
-    padding: 10px 16px;
+    padding: 9px 14px;
     border-radius: 9999px;
     border: none;
     background-color: var(--brand-berry, #c83768);
     color: #ffffff;
     font-family: inherit;
-    font-size: 13px;
+    font-size: 12.5px;
     font-weight: 700;
     cursor: pointer;
     box-shadow: 0 4px 12px rgba(200, 55, 104, 0.22);
@@ -298,9 +327,9 @@
 
 .pcc-onboarding-modal {
     width: 100%;
-    max-width: 430px;
-    padding: 26px 24px;
-    border-radius: 28px;
+    max-width: 420px;
+    padding: 24px 20px;
+    border-radius: 26px;
     background-color: var(--ob-bg);
     border: 1.5px solid var(--ob-border);
     color: var(--ob-text);
@@ -323,14 +352,14 @@
 
 .pcc-onboarding-title {
     margin: 0 0 10px 0;
-    font-size: 20px;
+    font-size: 19px;
     font-weight: 700;
     color: var(--ob-text);
 }
 
 .pcc-onboarding-text {
-    margin: 0 0 20px 0;
-    font-size: 13.5px;
+    margin: 0 0 18px 0;
+    font-size: 13px;
     line-height: 1.5;
     color: var(--ob-subtext);
 }
@@ -342,13 +371,13 @@
 
 .pcc-btn-secondary {
     flex: 1;
-    padding: 11px 16px;
+    padding: 10px 14px;
     border-radius: 9999px;
     border: 1px solid var(--ob-border);
     background-color: var(--ob-sub);
     color: var(--ob-text);
     font-family: inherit;
-    font-size: 13.5px;
+    font-size: 13px;
     font-weight: 700;
     cursor: pointer;
     transition: border-color 0.15s ease;
@@ -360,13 +389,13 @@
 
 .pcc-btn-primary {
     flex: 1.6;
-    padding: 11px 18px;
+    padding: 10px 16px;
     border-radius: 9999px;
     border: none;
     background-color: var(--ob-accent);
     color: #ffffff;
     font-family: inherit;
-    font-size: 13.5px;
+    font-size: 13px;
     font-weight: 700;
     cursor: pointer;
     transition: background-color 0.15s ease;
@@ -374,4 +403,11 @@
 
 .pcc-btn-primary:hover {
     background-color: var(--ob-accent-hover);
+}
+
+@media (max-width: 600px) {
+    .pcc-card {
+        padding: 16px 15px;
+        border-radius: 22px;
+    }
 }
