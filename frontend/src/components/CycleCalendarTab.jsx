@@ -1,5 +1,5 @@
 // frontend/src/components/CycleCalendarTab.jsx
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import axios from 'axios';
 import {
     MOOD_OPTIONS,
@@ -19,6 +19,24 @@ const MONTH_NAMES_UA = [
 ];
 
 const WEEKDAYS_UA = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Нд'];
+
+function parseDateKeyLocal(dateKey) {
+    const [y, m, d] = String(dateKey).slice(0, 10).split('-').map(Number);
+    return new Date(y, (m || 1) - 1, d || 1);
+}
+
+function formatDateKeyLocal(dateObj) {
+    const y = dateObj.getFullYear();
+    const m = String(dateObj.getMonth() + 1).padStart(2, '0');
+    const d = String(dateObj.getDate()).padStart(2, '0');
+    return `${y}-${m}-${d}`;
+}
+
+function addDaysToDateKey(dateKey, days) {
+    const dt = parseDateKeyLocal(dateKey);
+    dt.setDate(dt.getDate() + days);
+    return formatDateKeyLocal(dt);
+}
 
 function buildMonthGrid(year, month) {
     const firstDay = new Date(year, month - 1, 1);
@@ -41,7 +59,14 @@ function getCurrentHHMM() {
     return `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
 }
 
-const CycleCalendarTab = ({ theme, selectedDate, onDateChange, onCycleDataChanged }) => {
+const CycleCalendarTab = ({
+                              user,
+                              theme,
+                              selectedDate,
+                              onDateChange,
+                              onCycleDataChanged,
+                              refreshTrigger,
+                          }) => {
     const [viewYear, setViewYear] = useState(() => Number(selectedDate.split('-')[0]));
     const [viewMonth, setViewMonth] = useState(() => Number(selectedDate.split('-')[1]));
 
@@ -96,6 +121,10 @@ const CycleCalendarTab = ({ theme, selectedDate, onDateChange, onCycleDataChange
         reminderTime: '09:00',
     });
 
+    const profileLastStart = user?.lastPeriodStart ? String(user.lastPeriodStart).slice(0, 10) : '';
+    const profileCycleLen = Math.max(15, Number(user?.cycleLength) || 28);
+    const profilePeriodLen = Math.max(1, Number(user?.periodLength) || 5);
+
     const fetchAllCycleData = async () => {
         try {
             const [calRes, overRes, wellRes, medsRes] = await Promise.all([
@@ -125,7 +154,7 @@ const CycleCalendarTab = ({ theme, selectedDate, onDateChange, onCycleDataChange
 
     useEffect(() => {
         fetchAllCycleData();
-    }, [viewYear, viewMonth, selectedDate]);
+    }, [viewYear, viewMonth, selectedDate, refreshTrigger, profileLastStart, profileCycleLen, profilePeriodLen]);
 
     useEffect(() => {
         setPeriodForm((prev) => ({ ...prev, startDate: selectedDate }));
@@ -150,11 +179,106 @@ const CycleCalendarTab = ({ theme, selectedDate, onDateChange, onCycleDataChange
         }
     };
 
+    // Розрахунок днів циклу з налаштувань профілю, якщо в історії ще не створено записів
+    const profileDerivedDates = useMemo(() => {
+        if (!profileLastStart) {
+            return {
+                actualDays: [],
+                predictedDays: [],
+                fertileDays: [],
+                ovulationDays: [],
+                endDate: '',
+            };
+        }
+
+        const actualDays = [];
+        for (let i = 0; i < profilePeriodLen; i++) {
+            actualDays.push(addDaysToDateKey(profileLastStart, i));
+        }
+
+        const predictedDays = [];
+        const fertileDays = [];
+        const ovulationDays = [];
+
+        for (let cycleIdx = 0; cycleIdx <= 6; cycleIdx++) {
+            const cycleStart = addDaysToDateKey(profileLastStart, cycleIdx * profileCycleLen);
+
+            if (cycleIdx > 0) {
+                for (let d = 0; d < profilePeriodLen; d++) {
+                    predictedDays.push(addDaysToDateKey(cycleStart, d));
+                }
+            }
+
+            const ovulationOffset = Math.max(profilePeriodLen, profileCycleLen - 14);
+            const ovulationDate = addDaysToDateKey(cycleStart, ovulationOffset);
+            ovulationDays.push(ovulationDate);
+
+            for (let f = ovulationOffset - 5; f <= ovulationOffset + 1; f++) {
+                if (f >= profilePeriodLen) {
+                    fertileDays.push(addDaysToDateKey(cycleStart, f));
+                }
+            }
+        }
+
+        return {
+            actualDays,
+            predictedDays,
+            fertileDays,
+            ovulationDays,
+            endDate: addDaysToDateKey(profileLastStart, profilePeriodLen - 1),
+        };
+    }, [profileLastStart, profileCycleLen, profilePeriodLen]);
+
+    const serverActualDays = calendarData?.actualPeriodDays || [];
+    const hasServerPeriods = Array.isArray(cycleOverview?.periods) && cycleOverview.periods.length > 0;
+
+    // Якщо в БД ще немає записів PeriodLog, підтягуємо початковий цикл із налаштувань профілю
+    const actualSet = useMemo(() => {
+        const set = new Set(serverActualDays);
+        if (!hasServerPeriods && serverActualDays.length === 0 && profileDerivedDates.actualDays.length > 0) {
+            profileDerivedDates.actualDays.forEach((d) => set.add(d));
+        }
+        return set;
+    }, [serverActualDays, hasServerPeriods, profileDerivedDates]);
+
+    const predictedSet = useMemo(() => {
+        const set = new Set(calendarData?.predictedPeriodDays || []);
+        if (set.size === 0 && profileDerivedDates.predictedDays.length > 0) {
+            profileDerivedDates.predictedDays.forEach((d) => set.add(d));
+        }
+        return set;
+    }, [calendarData, profileDerivedDates]);
+
+    const fertileSet = useMemo(() => {
+        const set = new Set(calendarData?.fertileDays || []);
+        if (set.size === 0 && profileDerivedDates.fertileDays.length > 0) {
+            profileDerivedDates.fertileDays.forEach((d) => set.add(d));
+        }
+        return set;
+    }, [calendarData, profileDerivedDates]);
+
+    const ovulationSet = useMemo(() => {
+        const set = new Set(calendarData?.ovulationDays || []);
+        if (set.size === 0 && profileDerivedDates.ovulationDays.length > 0) {
+            profileDerivedDates.ovulationDays.forEach((d) => set.add(d));
+        }
+        return set;
+    }, [calendarData, profileDerivedDates]);
+
     // Точкове додавання або видалення дня менструації
     const handleTogglePeriodDay = async (targetDateKey) => {
         if (togglingDay) return;
         setTogglingDay(true);
         try {
+            // Якщо цикл ще не збережений у PeriodLog, спочатку фіксуємо базовий інтервал із профілю
+            if (!hasServerPeriods && serverActualDays.length === 0 && profileLastStart) {
+                await axios.post('/api/cycle/periods', {
+                    startDate: profileLastStart,
+                    endDate: profileDerivedDates.endDate,
+                    flowIntensity: 'MEDIUM',
+                });
+            }
+
             await axios.post('/api/cycle/toggle-day', { date: targetDateKey });
             await fetchAllCycleData();
             if (onCycleDataChanged) onCycleDataChanged();
@@ -288,10 +412,6 @@ const CycleCalendarTab = ({ theme, selectedDate, onDateChange, onCycleDataChange
         }
     };
 
-    const actualSet = new Set(calendarData?.actualPeriodDays || []);
-    const predictedSet = new Set(calendarData?.predictedPeriodDays || []);
-    const fertileSet = new Set(calendarData?.fertileDays || []);
-    const ovulationSet = new Set(calendarData?.ovulationDays || []);
     const wellnessMap = calendarData?.wellnessByDate || {};
     const medsCountMap = calendarData?.medsCountByDate || {};
 
@@ -317,6 +437,20 @@ const CycleCalendarTab = ({ theme, selectedDate, onDateChange, onCycleDataChange
     const todayStr = getTodayLocalStr();
     const isTodaySelected = selectedDate === todayStr;
     const currentTimeStr = getCurrentHHMM();
+
+    const displayedPeriods = hasServerPeriods
+        ? cycleOverview.periods.slice(0, 6)
+        : profileLastStart
+            ? [
+                {
+                    id: 'profile-initial-period',
+                    startDate: profileLastStart,
+                    endDate: profileDerivedDates.endDate,
+                    flowIntensity: 'MEDIUM',
+                    isFromProfile: true,
+                },
+            ]
+            : [];
 
     return (
         <div className={`cycle-calendar-tab ${theme}`}>
@@ -580,13 +714,13 @@ const CycleCalendarTab = ({ theme, selectedDate, onDateChange, onCycleDataChange
                 )}
 
                 {/* ІСТОРІЯ ОСТАННІХ ЦИКЛІВ ІЗ МОЖЛИВІСТЮ РЕДАГУВАННЯ ДАТ */}
-                {Array.isArray(cycleOverview?.periods) && cycleOverview.periods.length > 0 && (
+                {displayedPeriods.length > 0 && (
                     <section className="cc-card cc-card--compact">
                         <h4 className="cc-sub-heading cc-sub-heading--mb">
                             📅 Історія менструацій (можна змінити дати)
                         </h4>
                         <div className="cc-history-list">
-                            {cycleOverview.periods.slice(0, 6).map((p) => {
+                            {displayedPeriods.map((p) => {
                                 const startStr = p.startDate.slice(0, 10);
                                 const endStr = p.endDate ? p.endDate.slice(0, 10) : '';
                                 const isEditing = editingPeriodId === p.id;
@@ -646,25 +780,28 @@ const CycleCalendarTab = ({ theme, selectedDate, onDateChange, onCycleDataChange
                                         <span>
                                             🩸 <strong>{formatReadableDate(startStr)}</strong>
                                             {endStr && endStr !== startStr ? ` — ${formatReadableDate(endStr)}` : ''}
+                                            {p.isFromProfile ? ' (із профілю)' : ''}
                                         </span>
-                                        <div className="cc-row-icon-actions">
-                                            <button
-                                                type="button"
-                                                onClick={() => startEditingPeriod(p)}
-                                                className="cc-icon-btn cc-icon-btn--edit"
-                                                title="Редагувати дати початку/закінчення"
-                                            >
-                                                ✏️
-                                            </button>
-                                            <button
-                                                type="button"
-                                                onClick={() => handleDeletePeriod(p.id)}
-                                                className="cc-icon-btn cc-icon-btn--delete"
-                                                title="Видалити запис"
-                                            >
-                                                🗑️
-                                            </button>
-                                        </div>
+                                        {!p.isFromProfile && (
+                                            <div className="cc-row-icon-actions">
+                                                <button
+                                                    type="button"
+                                                    onClick={() => startEditingPeriod(p)}
+                                                    className="cc-icon-btn cc-icon-btn--edit"
+                                                    title="Редагувати дати початку/закінчення"
+                                                >
+                                                    ✏️
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => handleDeletePeriod(p.id)}
+                                                    className="cc-icon-btn cc-icon-btn--delete"
+                                                    title="Видалити запис"
+                                                >
+                                                    🗑️
+                                                </button>
+                                            </div>
+                                        )}
                                     </div>
                                 );
                             })}

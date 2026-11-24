@@ -5,6 +5,9 @@
     flex-wrap: wrap;
     gap: 22px;
     align-items: flex-start;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
     color: var(--cc-text);
 }
 
@@ -79,21 +82,29 @@
    ========================================================= */
 .cc-column-left {
     flex: 1 1 390px;
+    width: 100%;
+    max-width: 100%;
     display: flex;
     flex-direction: column;
     gap: 20px;
     min-width: 0;
+    box-sizing: border-box;
 }
 
 .cc-column-right {
     flex: 1 1 430px;
+    width: 100%;
+    max-width: 100%;
     display: flex;
     flex-direction: column;
     gap: 20px;
     min-width: 0;
+    box-sizing: border-box;
 }
 
 .cc-card {
+    width: 100%;
+    max-width: 100%;
     background: var(--cc-card-bg);
     border-radius: 28px;
     padding: 22px 24px;
@@ -164,6 +175,7 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    flex-shrink: 0;
     transition: border-color 0.15s ease, color 0.15s ease;
 }
 
@@ -202,6 +214,7 @@
     font-weight: 700;
     cursor: pointer;
     line-height: 1.35;
+    box-sizing: border-box;
     transition: all 0.15s ease;
 }
 
@@ -220,7 +233,7 @@
    ========================================================= */
 .cc-weekdays-grid {
     display: grid;
-    grid-template-columns: repeat(7, 1fr);
+    grid-template-columns: repeat(7, minmax(0, 1fr));
     gap: 5px;
     text-align: center;
     margin-bottom: 6px;
@@ -234,11 +247,12 @@
 
 .cc-days-grid {
     display: grid;
-    grid-template-columns: repeat(7, 1fr);
+    grid-template-columns: repeat(7, minmax(0, 1fr));
     gap: 6px;
 }
 
 .cc-day-cell {
+    min-width: 0;
     min-height: 54px;
     padding: 5px 4px;
     border-radius: 14px;
@@ -251,6 +265,7 @@
     justify-content: space-between;
     align-items: center;
     position: relative;
+    box-sizing: border-box;
     transition: transform 0.12s ease, box-shadow 0.12s ease;
 }
 
@@ -338,6 +353,7 @@
     font-weight: 700;
     cursor: pointer;
     font-size: 12.5px;
+    box-sizing: border-box;
     transition: all 0.15s ease;
 }
 
@@ -386,6 +402,8 @@
    ========================================================= */
 .cc-sub-form {
     margin-top: 14px;
+    width: 100%;
+    max-width: 100%;
     background: var(--cc-sub-bg);
     border: 1px solid var(--cc-border);
     border-radius: 20px;
@@ -393,6 +411,7 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
+    box-sizing: border-box;
 }
 
 .cc-sub-form--mb {
@@ -402,8 +421,13 @@
 
 .cc-grid-2 {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 10px;
+}
+
+.cc-grid-2 > div,
+.cc-activity-grid > div {
+    min-width: 0;
 }
 
 .cc-field-label {
@@ -427,7 +451,11 @@
 }
 
 .cc-input {
+    display: block;
     width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    min-height: 38px;
     padding: 8px 12px;
     border-radius: 14px;
     border: 1px solid var(--cc-border);
@@ -444,9 +472,23 @@
     border-color: var(--cc-berry);
 }
 
+.cc-input[type='date'],
+.cc-input[type='time'] {
+    -webkit-appearance: none;
+    appearance: none;
+    text-align: left;
+    line-height: 1.4;
+}
+
+.cc-input[type='date']::-webkit-date-and-time-value,
+.cc-input[type='time']::-webkit-date-and-time-value {
+    text-align: left;
+}
+
 .cc-input--sm {
     padding: 6px 10px;
     border-radius: 12px;
+    min-height: 34px;
 }
 
 .cc-textarea {
@@ -500,10 +542,12 @@
    АВТОСТАТИСТИКА ТА ІСТОРІЯ ЦИКЛІВ
    ========================================================= */
 .cc-stat-tile {
+    min-width: 0;
     background: var(--cc-sub-bg);
     border: 1px solid var(--cc-border);
     border-radius: 18px;
     padding: 12px 14px;
+    box-sizing: border-box;
 }
 
 .cc-stat-label {
@@ -563,6 +607,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 8px;
     background: var(--cc-sub-bg);
     border: 1px solid var(--cc-border);
     border-radius: 16px;
@@ -578,6 +623,7 @@
     display: flex;
     flex-direction: column;
     gap: 8px;
+    box-sizing: border-box;
 }
 
 .cc-edit-actions-row {
@@ -613,6 +659,7 @@
     display: flex;
     align-items: center;
     gap: 6px;
+    flex-shrink: 0;
 }
 
 .cc-icon-btn {
@@ -718,7 +765,7 @@
 
 .cc-activity-grid {
     display: grid;
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
     gap: 10px;
     margin-bottom: 14px;
 }
@@ -859,8 +906,19 @@
         padding: 16px;
     }
 
+    .cc-grid-2,
     .cc-activity-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .cc-input {
+        font-size: 16px;
+        min-height: 42px;
+    }
+
+    .cc-weekdays-grid,
+    .cc-days-grid {
+        gap: 4px;
     }
 
     .cc-day-cell {

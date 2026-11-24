@@ -202,10 +202,12 @@ const DashboardShell = ({ user, theme, onOpenProfile, refreshTrigger, bumpRefres
 
             {activeTab === 'cycle' && (
                 <CycleCalendarTab
+                    user={user}
                     theme={theme}
                     selectedDate={selectedDate}
                     onDateChange={setSelectedDate}
                     onCycleDataChanged={bumpRefresh}
+                    refreshTrigger={refreshTrigger}
                 />
             )}
 
